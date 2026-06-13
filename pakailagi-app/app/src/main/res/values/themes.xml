@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.PakaiLagi" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Base application theme. -->
+    <style name="Theme.PakaiLagi" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#0D9488</item>
+        <item name="colorSecondary">#059669</item>
+        <item name="android:statusBarColor">#0D9488</item>
+    </style>
 </resources>
