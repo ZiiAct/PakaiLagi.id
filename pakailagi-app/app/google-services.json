@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "465003774217",
+    "firebase_url": "https://pakailagiid-76f68-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "pakailagiid-76f68",
+    "storage_bucket": "pakailagiid-76f68.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:465003774217:android:30160c2eb8ea28b66fd3d8",
+        "android_client_info": {
+          "package_name": "com.example.pakailagi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhGvZ_eacfeMky_NR_SBzY6y-3HiznwLc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
