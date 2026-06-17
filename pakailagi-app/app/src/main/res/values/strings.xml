@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">PakaiLagi</string>
+    <string name="app_logo_desc">App Logo</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="login_desc">Log in to manage your pawns and secure\ntransactions.</string>
+    <string name="email_or_phone">Email or Phone Number</string>
+    <string name="enter_credentials">Enter your credentials</string>
+    <string name="password_label">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="password_hint">••••••••</string>
+    <string name="login_btn">Login</string>
+    <string name="new_to_market">New to Marketplace? </string>
+    <string name="register_now">Register Now</string>
 </resources>
