@@ -1,5 +1,6 @@
 package com.example.pakailagi;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,12 +35,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-        // Lambda expression (Simpler, cleaner, no more anonymous inner class warning)
+        // Handle Login button click
         btnLogin.setOnClickListener(v -> handleLogin());
 
+        // Handle Register click: Navigate to RegisterActivity
         tvRegisterNow.setOnClickListener(v -> {
-            // Navigate to RegisterActivity
-            Toast.makeText(LoginActivity.this, "Navigate to Register", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -50,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         if (input.isEmpty() || pass.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
         } else {
+            // Placeholder for Auth Logic
             Toast.makeText(this, "Logging in as: " + input, Toast.LENGTH_SHORT).show();
         }
     }
