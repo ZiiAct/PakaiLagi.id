@@ -7,21 +7,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-/**
- * RegisterActivity: Handles the user registration flow.
- * Ensure the IDs in activity_register.xml match the ones used in initializeViews().
- */
 public class RegisterActivity extends AppCompatActivity {
 
-    // Declare UI components
-    private EditText etEmail, etPassword;
+    // Deklarasi 4 komponen input
+    private EditText etFullName, etUsername, etEmail, etPassword;
     private Button btnRegister;
     private TextView tvLoginHere;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Ensure this layout exists and has the IDs defined below
         setContentView(R.layout.activity_register);
 
         initializeViews();
@@ -29,7 +24,9 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-        // Mapping UI components to XML IDs
+        // Nyingkronin ID dari XML
+        etFullName = findViewById(R.id.etFullName);
+        etUsername = findViewById(R.id.etUsername);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnRegister = findViewById(R.id.btnRegister);
@@ -37,23 +34,30 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-        // Register button action
+        // Aksi pas tombol Register diklik
         btnRegister.setOnClickListener(v -> performRegistration());
 
-        // Redirect back to Login
+        // Aksi pas teks "Login Here" diklik (tutup halaman ini biar balik ke login)
         tvLoginHere.setOnClickListener(v -> finish());
     }
 
     private void performRegistration() {
-        String email = etEmail.getText().toString().trim();
-        String pass = etPassword.getText().toString().trim();
+        // Ambil semua teks yang diketik
+        String fullName = etFullName.getText() != null ? etFullName.getText().toString().trim() : "";
+        String username = etUsername.getText() != null ? etUsername.getText().toString().trim() : "";
+        String email = etEmail.getText() != null ? etEmail.getText().toString().trim() : "";
+        String pass = etPassword.getText() != null ? etPassword.getText().toString().trim() : "";
 
-        if (email.isEmpty() || pass.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+        // Validasi: Pastikan nggak ada kotak yang kosong
+        if (fullName.isEmpty() || username.isEmpty() || email.isEmpty() || pass.isEmpty()) {
+            Toast.makeText(this, "Tolong isi semua data!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Logic for backend API will be implemented here
-        Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show();
+        // Kalau data komplit, tampilkan pesan sukses (sebagai dummy backend)
+        Toast.makeText(this, "Registrasi sukses! Halo " + username, Toast.LENGTH_SHORT).show();
+
+        // Opsional: Langsung tutup halaman register setelah sukses supaya otomatis balik ke halaman Login
+        finish();
     }
 }

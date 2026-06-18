@@ -3,16 +3,14 @@ package com.example.pakailagi;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.EditText; // Ini udah diganti jadi EditText biasa
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-/**
- * LoginActivity: Handles user authentication UI and logic.
- */
 public class LoginActivity extends AppCompatActivity {
 
+    // Ini udah diganti jadi EditText biasa
     private EditText etEmailOrPhone;
     private EditText etPassword;
     private Button btnLogin;
@@ -28,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
+        // Nyingkronin ID dari XML ke Java
         etEmailOrPhone = findViewById(R.id.etEmailOrPhone);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
@@ -35,25 +34,42 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-        // Handle Login button click
+        // Tombol Login diklik
         btnLogin.setOnClickListener(v -> handleLogin());
 
-        // Handle Register click: Navigate to RegisterActivity
-        tvRegisterNow.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-            startActivity(intent);
-        });
+        // Tombol Register diklik -> pindah ke halaman Register
+        if (tvRegisterNow != null) {
+            tvRegisterNow.setOnClickListener(v -> {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            });
+        }
     }
 
     private void handleLogin() {
-        String input = etEmailOrPhone.getText().toString().trim();
-        String pass = etPassword.getText().toString().trim();
+        // Ambil teks yang diketik user
+        String input = etEmailOrPhone.getText() != null ? etEmailOrPhone.getText().toString().trim() : "";
+        String pass = etPassword.getText() != null ? etPassword.getText().toString().trim() : "";
 
+        // Validasi kalau kosong
         if (input.isEmpty() || pass.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Tolong isi semua kolom", Toast.LENGTH_SHORT).show();
         } else {
-            // Placeholder for Auth Logic
-            Toast.makeText(this, "Logging in as: " + input, Toast.LENGTH_SHORT).show();
+            // --- DUMMY LOGIN LOGIC ---
+            // Cek apakah kredensialnya admin & 123
+            if (input.equals("admin") && pass.equals("123")) {
+                Toast.makeText(this, "Login Sukses!", Toast.LENGTH_SHORT).show();
+
+                // Meluncur ke MainMenu / Homepage
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+
+                // Tutup halaman login ini (biar user kalau pencet tombol 'back' gak balik ke form login)
+                finish();
+            } else {
+                // Kalau salah email/password
+                Toast.makeText(this, "Gagal! Coba pakai admin & 123", Toast.LENGTH_LONG).show();
+            }
         }
     }
 }

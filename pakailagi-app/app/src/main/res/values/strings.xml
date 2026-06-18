@@ -21,5 +21,22 @@
     <string name="aes_text">AES</string>
     <string name="sec_text">SEC</string>
     <string name="security_disclaimer">Your data is safe with us. We use world-class security protocols to protect your identity and financial information.</string>
-
+    <string name="home_greeting">Halo, </string>
+    <string name="home_username_dummy">Siti Aisyah</string>
+    <string name="home_subtitle">Mari berbagi dan bermanfaat bersama.</string>
+    <string name="home_banner_title">Berbagi hari ini,\nmanfaat untuk esok hari.</string>
+    <string name="home_btn_donate">Mulai Berdonasi</string>
+    <string name="cat_search">Cari Barang</string>
+    <string name="cat_grant">Ajukan Hibah</string>
+    <string name="cat_wishlist">Wishlist</string>
+    <string name="cat_history">Riwayat</string>
+    <string name="section_recent">Barang Terbaru</string>
+    <string name="see_all">Lihat semua</string>
+    <string name="nav_home">Beranda</string>
+    <string name="nav_search">Cari</string>
+    <string name="nav_grant">Hibah</string>
+    <string name="nav_wishlist">Wishlist</string>
+    <string name="nav_account">Akun</string>
+    <string name="full_name_label">Full Name</string>
+    <string name="username_label">Username</string>
 </resources>
