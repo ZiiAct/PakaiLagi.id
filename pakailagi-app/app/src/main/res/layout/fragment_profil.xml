@@ -58,90 +58,83 @@
             android:padding="16dp"
             android:paddingBottom="80dp">
 
-            <!-- Profile header card -->
-            <com.google.android.material.card.MaterialCardView
+            <!-- Profile header -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="@color/white">
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingTop="8dp"
+                android:paddingBottom="24dp"
+                android:layout_marginBottom="8dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <!-- Avatar with edit button -->
+                <FrameLayout
+                    android:layout_width="90dp"
+                    android:layout_height="90dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_avatar"
+                        android:src="@drawable/ic_person"
+                        android:scaleType="center"/>
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:layout_gravity="bottom|end"
+                        android:background="@drawable/bg_edit_button"
+                        android:src="@android:drawable/ic_menu_edit"
+                        android:tint="@color/white"
+                        android:padding="5dp"
+                        android:contentDescription="Edit foto"/>
+
+                </FrameLayout>
+
+                <!-- Name -->
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:padding="24dp">
+                    android:text="@string/user_name_dummy"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_dark"
+                    android:layout_marginTop="12dp"/>
 
-                    <!-- Avatar with edit button -->
-                    <FrameLayout
-                        android:layout_width="90dp"
-                        android:layout_height="90dp">
+                <!-- University -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_university_dummy"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_grey"
+                    android:layout_marginTop="2dp"/>
 
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/bg_avatar"
-                            android:src="@drawable/ic_person"
-                            android:scaleType="center"/>
+                <!-- Verified badge -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="8dp">
 
-                        <ImageView
-                            android:layout_width="26dp"
-                            android:layout_height="26dp"
-                            android:layout_gravity="bottom|end"
-                            android:background="@drawable/bg_edit_button"
-                            android:src="@android:drawable/ic_menu_edit"
-                            android:tint="@color/white"
-                            android:padding="5dp"
-                            android:contentDescription="Edit foto"/>
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_check_circle"/>
 
-                    </FrameLayout>
-
-                    <!-- Name -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/user_name_dummy"
-                        android:textSize="20sp"
+                        android:text="@string/terverifikasi"
+                        android:textSize="12sp"
+                        android:textColor="@color/primary_green"
                         android:textStyle="bold"
-                        android:textColor="@color/text_dark"
-                        android:layout_marginTop="12dp"/>
+                        android:layout_marginStart="4dp"/>
 
-                    <!-- University -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/user_university_dummy"
-                        android:textSize="13sp"
-                        android:textColor="@color/text_grey"
-                        android:layout_marginTop="2dp"/>
-
-                    <!-- Verified badge -->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginTop="8dp">
-
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:src="@drawable/ic_check_circle"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/terverifikasi"
-                            android:textSize="12sp"
-                            android:textColor="@color/primary_green"
-                            android:textStyle="bold"
-                            android:layout_marginStart="4dp"/>
-
-                    </LinearLayout>
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
 
             <!-- Stats card -->
             <com.google.android.material.card.MaterialCardView
