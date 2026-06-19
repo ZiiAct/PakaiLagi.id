@@ -4,160 +4,291 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F2F9F9"
+    android:background="#F4F9F9"
     android:fillViewport="true"
-    tools:ignore="TextContrastCheck,ImageContrastCheck,VisualLintButtonSize,VisualLintTextFieldSize">
+    tools:ignore="Typos">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:gravity="center_horizontal">
+        android:padding="24dp">
 
-        <Space android:layout_width="match_parent" android:layout_height="32dp"/>
-
-        <ImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="@drawable/ic_launcher_background"
-            android:backgroundTint="#1A7B42"
-            android:src="@android:drawable/ic_menu_myplaces"
-            android:padding="14dp"
-            app:tint="#FFFFFF"
-            android:contentDescription="@string/app_logo_desc"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/welcome_back"
-            android:textColor="#000000"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/login_desc"
-            android:textColor="#7A869A"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:layout_marginTop="8dp"/>
-
-        <Space android:layout_width="match_parent" android:layout_height="32dp"/>
-
-        <androidx.cardview.widget.CardView
+        <LinearLayout
+            android:id="@+id/headerSection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="32dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                app:cardBackgroundColor="#1A7B42"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                android:layout_gravity="center_horizontal">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_logo_utama"
+                    app:tint="#FFFFFF"
+                    android:padding="12dp"
+                    android:importantForAccessibility="no"
+                    tools:ignore="Typos" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login_welcome"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#212529"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:text="@string/login_desc_text"
+                android:textAlignment="center"
+                android:textColor="#6C757D"
+                android:textSize="14sp"
+                android:layout_marginTop="8dp"/>
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/headerSection"
+            android:layout_marginTop="32dp"
+            app:cardBackgroundColor="#FFFFFF"
             app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            app:cardBackgroundColor="#FFFFFF">
+            app:cardElevation="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="24dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/email_or_phone"
-                    android:textColor="#000000"
+                    android:text="@string/email_phone_label"
+                    android:textColor="#212529"
                     android:textSize="12sp"
                     android:textStyle="bold"/>
 
-                <EditText
-                    android:id="@+id/etEmailOrPhone"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@android:drawable/editbox_background_normal"
-                    android:hint="@string/enter_credentials"
-                    android:inputType="textEmailAddress"
-                    android:autofillHints="email"
-                    tools:ignore="TextFields"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
-                    android:textSize="14sp"/>
-
-                <Space android:layout_width="match_parent" android:layout_height="20dp"/>
-
-                <LinearLayout
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxStrokeColor="#1A7B42"
+                    app:startIconDrawable="@drawable/ic_person">
+
+                    <EditText
+                        android:id="@+id/etEmailOrPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/email_phone_hint"
+                        android:inputType="textEmailAddress"
+                        android:autofillHints="emailAddress"
+                        android:textSize="14sp"
+                        android:padding="16dp"
+                        tools:ignore="TextFields" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:id="@+id/tvPassLabel"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/password_label"
-                        android:textColor="#000000"
+                        android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@+id/tvForgotPass"
+                        android:text="@string/pass_label"
+                        android:textColor="#212529"
                         android:textSize="12sp"
                         android:textStyle="bold"/>
 
                     <TextView
-                        android:id="@+id/tvForgotPassword"
+                        android:id="@+id/tvForgotPass"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/forgot_password"
+                        android:layout_alignParentEnd="true"
+                        android:text="@string/forgot_pass_text"
                         android:textColor="#1A7B42"
                         android:textSize="12sp"
                         android:textStyle="bold"/>
-                </LinearLayout>
+                </RelativeLayout>
 
-                <EditText
-                    android:id="@+id/etPassword"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:background="@android:drawable/editbox_background_normal"
-                    android:hint="@string/password_hint"
-                    android:inputType="textPassword"
-                    android:autofillHints="password"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
-                    android:textSize="14sp"/>
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxStrokeColor="#1A7B42"
+                    app:startIconDrawable="@drawable/ic_lock"
+                    app:endIconMode="password_toggle">
 
-                <Space android:layout_width="match_parent" android:layout_height="24dp"/>
+                    <EditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/pass_hint"
+                        android:inputType="textPassword"
+                        android:autofillHints="password"
+                        android:textSize="14sp"
+                        android:padding="16dp"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/btnLogin"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/login_btn_text"
                     android:backgroundTint="#1A7B42"
-                    android:text="@string/login_btn"
-                    android:textColor="#FFFFFF"
                     android:textSize="16sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    app:cornerRadius="8dp"/>
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <Space android:layout_width="match_parent" android:layout_height="24dp"/>
+        </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
+            android:id="@+id/registerLinkSection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/cardForm"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/new_to_market"
-                android:textColor="#7A869A"
-                android:textSize="13sp"/>
+                android:textColor="#6C757D"/>
 
             <TextView
                 android:id="@+id/tvRegisterNow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/register_now"
+                android:text="@string/register_now_text"
                 android:textColor="#1A7B42"
-                android:textSize="13sp"
                 android:textStyle="bold"/>
         </LinearLayout>
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/registerLinkSection"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="24dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                android:baselineAligned="false"
+                tools:ignore="UseCompoundDrawables">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_badge_1"
+                        android:importantForAccessibility="no" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/badge_ojk"
+                        android:textSize="8sp"
+                        android:textColor="#6C757D"
+                        android:layout_marginTop="4dp"
+                        android:textStyle="bold"
+                        tools:ignore="SmallSp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_badge_2"
+                        android:importantForAccessibility="no" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/badge_aes"
+                        android:textSize="8sp"
+                        android:textColor="#6C757D"
+                        android:layout_marginTop="4dp"
+                        android:textStyle="bold"
+                        tools:ignore="SmallSp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_badge_3"
+                        android:importantForAccessibility="no" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/badge_secured"
+                        android:textSize="8sp"
+                        android:textColor="#6C757D"
+                        android:layout_marginTop="4dp"
+                        android:textStyle="bold"
+                        tools:ignore="SmallSp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/security_desc"
+                android:textAlignment="center"
+                android:textSize="10sp"
+                android:textColor="#6C757D"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                tools:ignore="SmallSp" />
+        </LinearLayout>
+
+    </RelativeLayout>
 </ScrollView>

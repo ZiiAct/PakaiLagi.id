@@ -1,26 +1,34 @@
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="Typos">
     <string name="app_name">PakaiLagi</string>
     <string name="app_logo_desc">App Logo</string>
 
-    <string name="welcome_back">Welcome Back</string>
-    <string name="login_desc">Log in to manage your pawns and secure\ntransactions.</string>
-    <string name="email_or_phone">Email or Phone Number</string>
-    <string name="enter_credentials">Enter your credentials</string>
-    <string name="password_label">Password</string>
-    <string name="forgot_password">Forgot Password?</string>
-    <string name="password_hint">••••••••</string>
-    <string name="login_btn">Login</string>
+    <string name="login_welcome">Welcome Back</string>
+    <string name="login_desc_text">Log in to manage your pawns and secure\ntransactions.</string>
+    <string name="email_phone_label">Email or Phone Number</string>
+    <string name="email_phone_hint">Enter your credentials</string>
+    <string name="pass_label">Password</string>
+    <string name="forgot_pass_text">Forgot Password?</string>
+    <string name="pass_hint">••••••••</string>
+    <string name="login_btn_text">Login</string>
     <string name="new_to_market">New to Marketplace? </string>
-    <string name="register_now">Register Now</string>
+    <string name="register_now_text">Register Now</string>
+
     <string name="register_title">Welcome!</string>
     <string name="register_desc">Sign up to manage your pawns and secure transactions.</string>
+    <string name="full_name_label">Full Name</string>
+    <string name="username_label">Username</string>
+    <string name="email_or_phone">Email or Phone Number</string>
+    <string name="password_label">Password</string>
     <string name="reg_btn">Register</string>
     <string name="already_have_account">Already have account? </string>
     <string name="login_here">Login Here</string>
-    <string name="ojk_text">OJK</string>
-    <string name="aes_text">AES</string>
-    <string name="sec_text">SEC</string>
-    <string name="security_disclaimer">Your data is safe with us. We use world-class security protocols to protect your identity and financial information.</string>
+
+    <string name="badge_ojk">OJK REGULATED</string>
+    <string name="badge_aes">AES-256 ENCRYPTED</string>
+    <string name="badge_secured">SECURED FUND</string>
+    <string name="security_desc">Your data is safe with us. We use world-class security protocols to protect your identity and financial information.</string>
+
     <string name="home_greeting">Halo, </string>
     <string name="home_username_dummy">Siti Aisyah</string>
     <string name="home_subtitle">Mari berbagi dan bermanfaat bersama.</string>
@@ -32,11 +40,19 @@
     <string name="cat_history">Riwayat</string>
     <string name="section_recent">Barang Terbaru</string>
     <string name="see_all">Lihat semua</string>
+
     <string name="nav_home">Beranda</string>
     <string name="nav_search">Cari</string>
     <string name="nav_grant">Hibah</string>
     <string name="nav_wishlist">Wishlist</string>
     <string name="nav_account">Akun</string>
-    <string name="full_name_label">Full Name</string>
-    <string name="username_label">Username</string>
+
+    <string name="item_kursi">Kursi Kantor Ergonomis</string>
+    <string name="loc_bekasi">Bekasi</string>
+    <string name="status_tersedia">Tersedia</string>
+    <string name="item_kotak">Kotak Penyimpanan Plastik</string>
+    <string name="loc_jaksel">Jakarta Selatan</string>
+
+    <string name="nav_history">Riwayat</string>
+    <string name="nav_profil">Profil</string>
 </resources>
