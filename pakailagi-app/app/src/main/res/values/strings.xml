@@ -29,6 +29,17 @@
     <string name="badge_secured">SECURED FUND</string>
     <string name="security_desc">Your data is safe with us. We use world-class security protocols to protect your identity and financial information.</string>
 
+    <string name="welcome_back">Welcome Back</string>
+    <string name="login_desc">Log in to manage your pawns and secure\ntransactions.</string>
+    <string name="enter_credentials">Enter your credentials</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="password_hint">••••••••</string>
+    <string name="login_btn">Login</string>
+    <string name="register_now">Register Now</string>
+    <string name="ojk_text">OJK</string>
+    <string name="aes_text">AES</string>
+    <string name="sec_text">SEC</string>
+    <string name="security_disclaimer">Your data is safe with us. We use world-class security protocols to protect your identity and financial information.</string>
     <string name="home_greeting">Halo, </string>
     <string name="home_username_dummy">Siti Aisyah</string>
     <string name="home_subtitle">Mari berbagi dan bermanfaat bersama.</string>
@@ -46,7 +57,6 @@
     <string name="nav_grant">Hibah</string>
     <string name="nav_wishlist">Wishlist</string>
     <string name="nav_account">Akun</string>
-
     <string name="item_kursi">Kursi Kantor Ergonomis</string>
     <string name="loc_bekasi">Bekasi</string>
     <string name="status_tersedia">Tersedia</string>
@@ -55,4 +65,46 @@
 
     <string name="nav_history">Riwayat</string>
     <string name="nav_profil">Profil</string>
+
+    <string name="wishlist_title">Wishlist Kamu</string>
+    <string name="wishlist_subtitle">Barang-barang yang kamu simpan untuk nanti.</string>
+    <string name="wishlist_filter_all">Semua</string>
+    <string name="wishlist_filter_books">Buku</string>
+    <string name="wishlist_filter_electronics">Elektronik</string>
+    <string name="wishlist_filter_furniture">Perabotan</string>
+    <string name="wishlist_recommendations_title">Mungkin Kamu Juga Suka</string>
+    <string name="btn_view_detail">Lihat Detail</string>
+    <string name="btn_apply">Ajukan</string>
+    <string name="btn_delete_wishlist">Hapus dari wishlist</string>
+    <string name="nav_riwayat">Riwayat</string>
+    <string name="riwayat_title">Riwayat Pengajuan</string>
+    <string name="tab_sedang_diajukan">Sedang Diajukan</string>
+    <string name="tab_selesai">Selesai</string>
+    <string name="status_menunggu">Menunggu Persetujuan</string>
+    <string name="status_siap">Siap Diambil</string>
+    <string name="btn_batalkan">Batalkan</string>
+    <string name="btn_detail">Detail</string>
+    <string name="btn_kabari">Kabari Sudah Diambil</string>
+    <string name="lokasi_pengambilan">Lokasi Pengambilan</string>
+    <string name="profil_title">Profil</string>
+    <string name="user_name_dummy">Arya Wiguna</string>
+    <string name="user_university_dummy">Universitas Gadjah Mada</string>
+    <string name="terverifikasi">TERVERIFIKASI</string>
+    <string name="barang_dihibahkan">Barang Dihibahkan</string>
+    <string name="barang_diterima">Barang Diterima</string>
+    <string name="akun_aktivitas_label">AKUN &amp; AKTIVITAS</string>
+    <string name="dukungan_label">DUKUNGAN</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="my_donations">My Donations</string>
+    <string name="help_label">Help</string>
+    <string name="logout_label">Logout</string>
+    <string name="quote_dampak">\"Berbagi barang tak terpakai, memberdayakan komunitas dan melestarikan bumi.\"</string>
+    <string name="cari_barang_title">Cari Barang</string>
+    <string name="cari_barang_hint">Cari barang yang kamu butuhkan...</string>
+    <string name="cari_filter_all">Semua</string>
+    <string name="cari_filter_elektronik">Elektronik</string>
+    <string name="cari_filter_perabot">Perabot</string>
+    <string name="cari_filter_olahraga">Olahraga</string>
+    <string name="cari_filter_buku">Buku</string>
+    <string name="item_tersedia">Tersedia</string>
 </resources>

@@ -5,19 +5,19 @@
         android:icon="@android:drawable/ic_menu_myplaces"
         android:title="@string/nav_home" />
     <item
-        android:id="@+id/nav_search"
-        android:icon="@android:drawable/ic_menu_search"
-        android:title="@string/nav_search" />
+        android:id="@+id/nav_wishlist"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="@string/nav_wishlist" />
     <item
         android:id="@+id/nav_grant"
         android:icon="@android:drawable/ic_menu_agenda"
         android:title="@string/nav_grant" />
     <item
-        android:id="@+id/nav_wishlist"
-        android:icon="@android:drawable/ic_menu_add"
-        android:title="@string/nav_wishlist" />
+        android:id="@+id/nav_riwayat"
+        android:icon="@android:drawable/ic_menu_recent_history"
+        android:title="@string/nav_riwayat" />
     <item
-        android:id="@+id/nav_account"
+        android:id="@+id/nav_profil"
         android:icon="@android:drawable/ic_menu_my_calendar"
-        android:title="@string/nav_account" />
+        android:title="@string/nav_profil" />
 </menu>

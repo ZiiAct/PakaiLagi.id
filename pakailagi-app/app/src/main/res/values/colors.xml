@@ -8,4 +8,11 @@
     <color name="bg_light_grey">#F8F9FA</color>
     <color name="text_dark">#212529</color>
     <color name="text_grey">#6C757D</color>
+    <color name="delete_red">#DC3545</color>
+    <color name="badge_good">#495057</color>
+    <color name="toolbar_dark">#1C1C2E</color>
+    <color name="status_orange">#FD7E14</color>
+    <color name="location_bg">#E8F5E9</color>
+    <color name="detail_blue">#0D6EFD</color>
+    <color name="cari_header">#1A4D30</color>
 </resources>
