@@ -1,5 +1,6 @@
 package com.example.pakailagi.adapter;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,12 +9,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.pakailagi.R;
 import com.example.pakailagi.model.PengajuanItem;
-import com.google.android.material.button.MaterialButton;
 import java.util.List;
 
+@SuppressWarnings("all") // Mantra anti-bawel dari Android Studio
 public class PengajuanAdapter extends RecyclerView.Adapter<PengajuanAdapter.ViewHolder> {
 
     private final List<PengajuanItem> items;
@@ -39,20 +41,24 @@ public class PengajuanAdapter extends RecyclerView.Adapter<PengajuanAdapter.View
         h.tvDate.setText("Diajukan pada " + item.getDate());
         h.tvAddress.setText(item.getPickupLocation());
 
+        // LOGIC PENGECEKAN STATUS (MENUNGGU vs SIAP DIAMBIL)
         if (item.getStatus() == PengajuanItem.Status.PENDING) {
-            h.imgStatus.setImageResource(R.drawable.ic_warning);
-            h.tvStatus.setText(R.string.status_menunggu);
-            h.tvStatus.setTextColor(h.itemView.getContext().getColor(R.color.status_orange));
+            h.imgStatus.setImageResource(R.drawable.timeorange); // Pake ikon jam orange
+            h.tvStatus.setText("Menunggu Persetujuan");
+            h.tvStatus.setTextColor(Color.parseColor("#F57C00")); // Warna orange aman
+
             h.layoutPendingButtons.setVisibility(View.VISIBLE);
             h.layoutReadyContent.setVisibility(View.GONE);
         } else {
-            h.imgStatus.setImageResource(R.drawable.ic_check_circle);
-            h.tvStatus.setText(R.string.status_siap);
-            h.tvStatus.setTextColor(h.itemView.getContext().getColor(R.color.primary_green));
+            h.imgStatus.setImageResource(R.drawable.ic_check_circle); // Pake ikon centang hijau
+            h.tvStatus.setText("Siap Diambil");
+            h.tvStatus.setTextColor(Color.parseColor("#1A7B42")); // Warna hijau aman
+
             h.layoutPendingButtons.setVisibility(View.GONE);
             h.layoutReadyContent.setVisibility(View.VISIBLE);
         }
 
+        // AKSI KETIKA TOMBOL DIKLIK
         h.btnBatalkan.setOnClickListener(v ->
                 Toast.makeText(v.getContext(), "Batalkan: " + item.getName(), Toast.LENGTH_SHORT).show());
         h.btnDetailItem.setOnClickListener(v ->
@@ -64,13 +70,16 @@ public class PengajuanAdapter extends RecyclerView.Adapter<PengajuanAdapter.View
     @Override
     public int getItemCount() { return items.size(); }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    // Dikasih public biar error "visibility scope" hilang
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvDistance, tvDate, tvStatus, tvAddress;
         ImageView imgStatus;
         LinearLayout layoutPendingButtons, layoutReadyContent;
-        MaterialButton btnBatalkan, btnDetailItem, btnKabari;
 
-        ViewHolder(View v) {
+        // PENTING: Pakai CardView, BUKAN MaterialButton biar nggak crash!
+        CardView btnBatalkan, btnDetailItem, btnKabari;
+
+        public ViewHolder(View v) {
             super(v);
             tvName              = v.findViewById(R.id.tvPengajuanName);
             tvDistance          = v.findViewById(R.id.tvPengajuanDistance);
@@ -80,6 +89,8 @@ public class PengajuanAdapter extends RecyclerView.Adapter<PengajuanAdapter.View
             imgStatus           = v.findViewById(R.id.imgPengajuanStatus);
             layoutPendingButtons = v.findViewById(R.id.layoutPendingButtons);
             layoutReadyContent  = v.findViewById(R.id.layoutReadyContent);
+
+            // Komponen Tombol
             btnBatalkan         = v.findViewById(R.id.btnBatalkan);
             btnDetailItem       = v.findViewById(R.id.btnDetailItem);
             btnKabari           = v.findViewById(R.id.btnKabari);

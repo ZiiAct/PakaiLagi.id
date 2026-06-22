@@ -1,43 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginBottom="16dp"
+    app:cardBackgroundColor="#FFFFFF"
     app:cardCornerRadius="12dp"
     app:cardElevation="2dp"
-    app:cardBackgroundColor="@color/white">
+    tools:ignore="HardcodedText,ContentDescription,SmallSp,UseCompoundDrawables,Typos,SpeakableTextPresentCheck">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="12dp">
+        android:padding="16dp">
 
-        <!-- Top row: image + content -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/imgPengajuanItem"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:background="#E9ECEF"
-                android:src="@android:drawable/ic_menu_gallery"
-                android:scaleType="centerCrop"
-                android:padding="16dp"/>
+            <androidx.cardview.widget.CardView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp">
+                <ImageView
+                    android:id="@+id/ivItemImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#212529"
+                    android:scaleType="centerCrop" />
+            </androidx.cardview.widget.CardView>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginStart="12dp">
+                android:orientation="vertical">
 
-                <!-- Title row + distance badge -->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -46,174 +50,196 @@
                         android:id="@+id/tvPengajuanName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toStartOf="@+id/tvPengajuanDistance"
                         android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@+id/tvPengajuanDistance"
+                        android:text="Nama Barang"
+                        android:textColor="#212529"
+                        android:textSize="14sp"
                         android:textStyle="bold"
-                        android:textColor="@color/text_dark"
-                        android:textSize="13sp"
-                        android:maxLines="2"/>
+                        android:maxLines="2"
+                        android:ellipsize="end" />
 
                     <TextView
                         android:id="@+id/tvPengajuanDistance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/bg_distance_badge"
-                        android:paddingStart="6dp"
-                        android:paddingEnd="6dp"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        android:textSize="10sp"
-                        android:textColor="@color/text_grey"/>
-
+                        android:background="@drawable/bg_chip_light_blue"
+                        android:paddingHorizontal="6dp"
+                        android:paddingVertical="2dp"
+                        android:text="0km"
+                        android:textColor="#495057"
+                        android:textSize="8sp"
+                        android:textStyle="bold" />
                 </RelativeLayout>
 
-                <!-- Date -->
                 <TextView
                     android:id="@+id/tvPengajuanDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textSize="11sp"
-                    android:textColor="@color/text_grey"/>
+                    android:layout_marginTop="2dp"
+                    android:text="Diajukan pada..."
+                    android:textColor="#6C757D"
+                    android:textSize="10sp" />
 
-                <!-- Status row -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_marginTop="6dp"
                     android:gravity="center_vertical"
-                    android:layout_marginTop="6dp">
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/imgPengajuanStatus"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"/>
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@drawable/timeorange" />
 
                     <TextView
                         android:id="@+id/tvPengajuanStatus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:textSize="12sp"
-                        android:textStyle="bold"/>
-
+                        android:text="Status"
+                        android:textColor="#F57C00"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
-        <!-- PENDING: Batalkan + Detail buttons -->
         <LinearLayout
             android:id="@+id/layoutPendingButtons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal"
-            android:layout_marginTop="12dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
-            <com.google.android.material.button.MaterialButton
+            <androidx.cardview.widget.CardView
                 android:id="@+id/btnBatalkan"
                 android:layout_width="0dp"
                 android:layout_height="36dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="6dp"
-                android:text="@string/btn_batalkan"
-                android:textSize="12sp"
-                android:textColor="@color/delete_red"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                app:strokeColor="@color/delete_red"/>
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="0dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_btn_outline_square"
+                    android:gravity="center">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Batalkan"
+                        android:textColor="#D32F2F"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-            <com.google.android.material.button.MaterialButton
+            <androidx.cardview.widget.CardView
                 android:id="@+id/btnDetailItem"
                 android:layout_width="0dp"
                 android:layout_height="36dp"
+                android:layout_marginStart="12dp"
                 android:layout_weight="1"
-                android:layout_marginStart="6dp"
-                android:text="@string/btn_detail"
-                android:textSize="12sp"
-                android:textColor="@color/detail_blue"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                app:strokeColor="@color/detail_blue"/>
-
+                app:cardBackgroundColor="#E8F0FE"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="0dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Detail"
+                    android:textColor="#1A73E8"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
 
-        <!-- READY: location card + Kabari button -->
         <LinearLayout
             android:id="@+id/layoutReadyContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="12dp"
             android:visibility="gone">
 
-            <!-- Location card -->
-            <LinearLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_location_card"
-                android:padding="12dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:layout_marginTop="12dp"
+                app:cardBackgroundColor="#E8F5E9"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:padding="12dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lokasi_pengambilan"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/primary_green"/>
+                    <ImageView
+                        android:id="@+id/icLocation"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/location_on"
+                        app:tint="#1A7B42" />
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginTop="4dp">
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="8dp"
+                        android:layout_toStartOf="@+id/icDirection"
+                        android:layout_toEndOf="@+id/icLocation"
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:src="@android:drawable/ic_menu_mylocation"
-                            android:tint="@color/primary_green"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Lokasi Pengambilan"
+                            android:textColor="#1A7B42"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/tvPickupAddress"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:textSize="11sp"
-                            android:textColor="@color/text_dark"/>
-
+                            android:text="Alamat Kosong"
+                            android:textColor="#1A7B42"
+                            android:textSize="10sp" />
                     </LinearLayout>
-                </LinearLayout>
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@android:drawable/ic_menu_compass"
-                    android:tint="@color/primary_green"/>
+                    <ImageView
+                        android:id="@+id/icDirection"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_leftsign" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
 
-            </LinearLayout>
-
-            <!-- Kabari button -->
-            <com.google.android.material.button.MaterialButton
+            <androidx.cardview.widget.CardView
                 android:id="@+id/btnKabari"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/btn_kabari"
-                android:textSize="14sp"
-                app:backgroundTint="@color/primary_green"
-                app:cornerRadius="8dp"/>
-
+                android:layout_height="40dp"
+                android:layout_marginTop="12dp"
+                app:cardBackgroundColor="#1A7B42"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Kabari Sudah Diambil"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
-
     </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+</androidx.cardview.widget.CardView>

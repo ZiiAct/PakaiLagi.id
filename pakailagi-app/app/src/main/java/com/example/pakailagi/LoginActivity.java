@@ -1,75 +1,48 @@
 package com.example.pakailagi;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
-import android.widget.EditText; // Ini udah diganti jadi EditText biasa
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+@SuppressWarnings("all")
 public class LoginActivity extends AppCompatActivity {
-
-    // Ini udah diganti jadi EditText biasa
-    private EditText etEmailOrPhone;
-    private EditText etPassword;
-    private Button btnLogin;
-    private TextView tvRegisterNow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
-        initializeViews();
-        setupListeners();
-    }
+        try {
+            setContentView(R.layout.activity_login);
 
-    private void initializeViews() {
-        // Nyingkronin ID dari XML ke Java
-        etEmailOrPhone = findViewById(R.id.etEmailOrPhone);
-        etPassword = findViewById(R.id.etPassword);
-        btnLogin = findViewById(R.id.btnLogin);
-        tvRegisterNow = findViewById(R.id.tvRegisterNow);
-    }
-
-    private void setupListeners() {
-        // Tombol Login diklik
-        btnLogin.setOnClickListener(v -> handleLogin());
-
-        // Tombol Register diklik -> pindah ke halaman Register
-        if (tvRegisterNow != null) {
-            tvRegisterNow.setOnClickListener(v -> {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
-            });
-        }
-    }
-
-    private void handleLogin() {
-        // Ambil teks yang diketik user
-        String input = etEmailOrPhone.getText() != null ? etEmailOrPhone.getText().toString().trim() : "";
-        String pass = etPassword.getText() != null ? etPassword.getText().toString().trim() : "";
-
-        // Validasi kalau kosong
-        if (input.isEmpty() || pass.isEmpty()) {
-            Toast.makeText(this, "Tolong isi semua kolom", Toast.LENGTH_SHORT).show();
-        } else {
-            // --- DUMMY LOGIN LOGIC ---
-            // Cek apakah kredensialnya admin & 123
-            if (input.equals("admin") && pass.equals("123")) {
-                Toast.makeText(this, "Login Sukses!", Toast.LENGTH_SHORT).show();
-
-                // Meluncur ke MainMenu / Homepage
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-
-                // Tutup halaman login ini (biar user kalau pencet tombol 'back' gak balik ke form login)
-                finish();
-            } else {
-                // Kalau salah email/password
-                Toast.makeText(this, "Gagal! Coba pakai admin & 123", Toast.LENGTH_LONG).show();
+            Button btnLogin = findViewById(R.id.btnLogin);
+            if (btnLogin != null) {
+                btnLogin.setOnClickListener(v -> {
+                    Toast.makeText(this, "Login Sukses!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
+                });
             }
+
+            TextView tvRegisterNow = findViewById(R.id.tvRegisterNow);
+            if (tvRegisterNow != null) {
+                tvRegisterNow.setOnClickListener(v -> Toast.makeText(this, "Menu Daftar Belum Tersedia", Toast.LENGTH_SHORT).show());
+            }
+
+        } catch (Throwable e) {
+            // JIKA XML LOGIN BERMASALAH, CETAK MERAH DI LAYAR!
+            ScrollView sv = new ScrollView(this);
+            TextView tv = new TextView(this);
+            tv.setText("ERROR DI LOGIN ACTIVITY:\n\n" + Log.getStackTraceString(e));
+            tv.setTextColor(Color.RED);
+            tv.setPadding(40, 40, 40, 40);
+            sv.addView(tv);
+            setContentView(sv);
         }
     }
 }

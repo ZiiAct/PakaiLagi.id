@@ -1,28 +1,30 @@
 package com.example.pakailagi;
 
-import android.os.Build;
+import android.app.AlertDialog;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import com.example.pakailagi.adapter.PengajuanAdapter;
-import com.example.pakailagi.model.PengajuanItem;
-import java.util.ArrayList;
-import java.util.List;
 
+@SuppressWarnings("all")
 public class RiwayatPengajuanFragment extends Fragment {
+
+    public RiwayatPengajuanFragment() {}
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_riwayat_pengajuan, container, false);
     }
 
@@ -30,55 +32,80 @@ public class RiwayatPengajuanFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        View rToolbar = view.findViewById(R.id.riwayatToolbar);
-        final int rtLeft  = rToolbar.getPaddingLeft();
-        final int rtRight = rToolbar.getPaddingRight();
-        final int rtBase  = (int)(56 * getResources().getDisplayMetrics().density);
-        ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
-            int sbH = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
-            rToolbar.getLayoutParams().height = rtBase + sbH;
-            rToolbar.requestLayout();
-            rToolbar.setPadding(rtLeft, sbH, rtRight, 0);
-            return insets;
+        View btnBack = view.findViewById(R.id.btnBackRiwayat);
+        if (btnBack != null) btnBack.setOnClickListener(v -> {
+            if (getActivity() != null) getActivity().findViewById(R.id.nav_home_layout).performClick();
         });
 
-        view.findViewById(R.id.btnBack).setOnClickListener(v -> {
-            if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).navigateTo(R.id.nav_wishlist);
-            }
-        });
+        try {
+            ViewGroup root = (ViewGroup) view;
+            LinearLayout mainLayout = (LinearLayout) ((android.widget.ScrollView) root.getChildAt(0)).getChildAt(0);
 
-        RecyclerView recycler = view.findViewById(R.id.recyclerPengajuan);
-        recycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        recycler.setAdapter(new PengajuanAdapter(getDummyItems()));
-    }
+            // SESUAI REQUEST: TOMBOL SEARCH BIKIN DIALOG INPUT
+            android.widget.RelativeLayout headerLayout = (android.widget.RelativeLayout) mainLayout.getChildAt(0);
+            ImageView btnSearch = (ImageView) headerLayout.getChildAt(2);
+            btnSearch.setOnClickListener(v -> {
+                EditText input = new EditText(getContext());
+                input.setHint("Ketik nama barang...");
+                input.setPadding(40, 40, 40, 40);
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Cari Riwayat")
+                        .setView(input)
+                        .setPositiveButton("Cari", (dialog, which) ->
+                                Toast.makeText(getContext(), "Mencari: " + input.getText(), Toast.LENGTH_SHORT).show()
+                        ).show();
+            });
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            requireActivity().getWindow().setStatusBarColor(
-                    requireContext().getColor(R.color.toolbar_dark));
-        }
-    }
+            // Tab Logic
+            LinearLayout tabsRow = (LinearLayout) mainLayout.getChildAt(1);
+            LinearLayout tabSedangDiajukan = (LinearLayout) tabsRow.getChildAt(0);
+            LinearLayout tabSelesai = (LinearLayout) tabsRow.getChildAt(1);
+            TextView tvSedangDiajukan = (TextView) tabSedangDiajukan.getChildAt(0);
+            TextView tvSelesai = (TextView) tabSelesai.getChildAt(0);
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            requireActivity().getWindow().setStatusBarColor(
-                    requireContext().getColor(R.color.primary_green));
-        }
-    }
+            CardView card1 = (CardView) mainLayout.getChildAt(3);
+            CardView card2 = (CardView) mainLayout.getChildAt(4);
 
-    private List<PengajuanItem> getDummyItems() {
-        List<PengajuanItem> items = new ArrayList<>();
-        items.add(new PengajuanItem(
-                "Buku Kalkulus Purcel", "200m", "12 Okt 2023",
-                PengajuanItem.Status.PENDING, null));
-        items.add(new PengajuanItem(
-                "Headphone Sony WH-1000XM4", "1,2km", "10 Okt 2023",
-                PengajuanItem.Status.READY, "Kosan Hijau, Jl. Ganesha No. 10"));
-        return items;
+            LinearLayout layoutCard1 = (LinearLayout) card1.getChildAt(0);
+            LinearLayout textLayoutCard1 = (LinearLayout) ((LinearLayout) layoutCard1.getChildAt(0)).getChildAt(1);
+            TextView tvTitleCard1 = (TextView) ((android.widget.RelativeLayout) textLayoutCard1.getChildAt(0)).getChildAt(0);
+            TextView tvStatusCard1 = (TextView) ((LinearLayout) textLayoutCard1.getChildAt(2)).getChildAt(1);
+            LinearLayout buttonsCard1 = (LinearLayout) layoutCard1.getChildAt(1);
+
+            buttonsCard1.getChildAt(0).setOnClickListener(v -> Toast.makeText(getContext(), "Pengajuan Dibatalkan!", Toast.LENGTH_SHORT).show());
+            buttonsCard1.getChildAt(1).setOnClickListener(v -> {
+                if (getActivity() instanceof MainActivity) ((MainActivity) getActivity()).showDetailBarang("Buku Kalkulus Purcel", "200m dari Anda");
+            });
+
+            CardView btnKabari = (CardView) ((LinearLayout) card2.getChildAt(0)).getChildAt(2);
+            btnKabari.setOnClickListener(v -> Toast.makeText(getContext(), "Pesan dikirim! Pemilik berhasil dikabari.", Toast.LENGTH_LONG).show());
+
+            tabSedangDiajukan.setOnClickListener(v -> {
+                tvSedangDiajukan.setTextColor(Color.parseColor("#212529"));
+                tvSedangDiajukan.setTypeface(null, Typeface.BOLD);
+                tvSelesai.setTextColor(Color.parseColor("#6C757D"));
+                tvSelesai.setTypeface(null, Typeface.NORMAL);
+
+                card2.setVisibility(View.VISIBLE);
+                tvTitleCard1.setText("Buku Kalkulus Purcel");
+                tvStatusCard1.setText("Menunggu Persetujuan");
+                tvStatusCard1.setTextColor(Color.parseColor("#F57C00"));
+                buttonsCard1.setVisibility(View.VISIBLE);
+            });
+
+            tabSelesai.setOnClickListener(v -> {
+                tvSelesai.setTextColor(Color.parseColor("#212529"));
+                tvSelesai.setTypeface(null, Typeface.BOLD);
+                tvSedangDiajukan.setTextColor(Color.parseColor("#6C757D"));
+                tvSedangDiajukan.setTypeface(null, Typeface.NORMAL);
+
+                card2.setVisibility(View.GONE);
+                tvTitleCard1.setText("Meja Belajar Lipat (Selesai)");
+                tvStatusCard1.setText("Telah Diterima");
+                tvStatusCard1.setTextColor(Color.parseColor("#1A7B42"));
+                buttonsCard1.setVisibility(View.GONE);
+            });
+
+        } catch (Exception e) {}
     }
 }
