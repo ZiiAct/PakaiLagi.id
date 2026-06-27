@@ -1,0 +1,697 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F9FA"
+    tools:ignore="HardcodedText,ContentDescription,SmallSp,UseCompoundDrawables,UselessParent,TooManyViews,Typos,Autofill">
+    <!-- PAKE PEREDAM DI ATAS BIAR ANDROID STUDIO NGGAK BAWEL -->
+
+    <!-- Konten Scroll -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/adminBottomNav"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="24dp">
+
+            <!-- 1. TOP APP BAR -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="16dp">
+
+                <ImageView
+                    android:id="@+id/btnMenu"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+                    app:tint="#0056B3" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_toEndOf="@id/btnMenu"
+                    android:text="PakaiLagi"
+                    android:textColor="#0056B3"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/ivAvatar"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/ic_person" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="16dp"
+                    android:layout_toStartOf="@id/ivAvatar"
+                    app:srcCompat="@drawable/ic_notification"
+                    app:tint="#495057" />
+            </RelativeLayout>
+
+            <!-- 2. HEADER TITLE & BUTTON -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hibah Inventory"
+                    android:textColor="#212529"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Manage and track items donated for a second life."
+                    android:textColor="#6C757D"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_btn_blue_radius8"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="10dp">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        app:srcCompat="@android:drawable/ic_input_add"
+                        app:tint="#FFFFFF" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="New Hibah Entry"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 3. SEARCH & FILTERS -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_input_admin_gray"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:srcCompat="@drawable/ic_cat_search"
+                    app:tint="#ADB5BD" />
+
+                <!-- DI-FIX: Nambahin inputType text biar nggak warning -->
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:background="@android:color/transparent"
+                    android:hint="Search by SKU or Donor Name..."
+                    android:inputType="text"
+                    android:importantForAutofill="no"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="20dp"
+                android:layout_marginTop="12dp">
+
+                <!-- Filter Status -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_btn_outline_gray"
+                    android:gravity="center"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="8dp">
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        app:srcCompat="@android:drawable/ic_menu_manage"
+                        app:tint="#6C757D" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:text="Status"
+                        android:textColor="#495057"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <!-- Filter Date Range -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/bg_btn_outline_gray"
+                    android:gravity="center"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="8dp">
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        app:srcCompat="@android:drawable/ic_menu_my_calendar"
+                        app:tint="#6C757D" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:text="Date Range"
+                        android:textColor="#495057"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 4. LIST ITEM CARDS -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:layout_marginTop="20dp">
+
+                <!-- CARD 1: PENDING (MacBook Pro) -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="SKU: HL-2024-001"
+                                android:textColor="#868E96"
+                                android:textSize="10sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:background="@drawable/bg_badge_pending"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="4dp"
+                                android:text="PENDING"
+                                android:textColor="#0056B3"
+                                android:textSize="10sp"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+
+                        <!-- DI-FIX: Tanda kutip 14" diubah jadi 14&quot; biar gak error -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="MacBook\nPro 14&quot; M1"
+                            android:textColor="#212529"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:lineSpacingExtra="2dp"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                app:srcCompat="@drawable/ic_person" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Donor"
+                                    android:textColor="#ADB5BD"
+                                    android:textSize="10sp" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ahmad Sulaiman"
+                                    android:textColor="#212529"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="RECEIVING FLOW"
+                                android:textColor="#6C757D"
+                                android:textSize="10sp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:text="40%"
+                                android:textColor="#212529"
+                                android:textSize="10sp"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="4dp"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal">
+                            <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="0.4" android:background="#0056B3" />
+                            <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="0.6" android:background="#E9ECEF" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:baselineAligned="false"
+                            android:orientation="horizontal">
+
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                                <ImageView android:layout_width="16dp" android:layout_height="16dp" app:srcCompat="@drawable/ic_step_check" app:tint="#0056B3" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Initial" android:textSize="9sp" android:textColor="#0056B3" android:textStyle="bold"/>
+                            </LinearLayout>
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                                <ImageView android:layout_width="16dp" android:layout_height="16dp" app:srcCompat="@drawable/ic_step_check" app:tint="#0056B3" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="QC" android:textSize="9sp" android:textColor="#0056B3" android:textStyle="bold"/>
+                            </LinearLayout>
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                                <ImageView android:layout_width="16dp" android:layout_height="16dp" app:srcCompat="@android:drawable/ic_menu_gallery" app:tint="#ADB5BD" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Inventory" android:textSize="9sp" android:textColor="#ADB5BD" />
+                            </LinearLayout>
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                                <ImageView android:layout_width="16dp" android:layout_height="16dp" app:srcCompat="@android:drawable/ic_menu_view" app:tint="#ADB5BD" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Ready" android:textSize="9sp" android:textColor="#ADB5BD" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="16dp" android:background="#F1F3F5" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginEnd="16dp"
+                                    app:srcCompat="@drawable/ic_edit_pencil"
+                                    app:tint="#6C757D" />
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginEnd="16dp"
+                                    app:srcCompat="@android:drawable/ic_menu_delete"
+                                    app:tint="#6C757D" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/bg_btn_details"
+                                    android:paddingHorizontal="16dp"
+                                    android:paddingVertical="8dp"
+                                    android:text="Details"
+                                    android:textColor="#0056B3"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </RelativeLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- CARD 2: TERHIBAHKAN (Rolex Submariner) -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="SKU: HL-2024-002"
+                                android:textColor="#868E96"
+                                android:textSize="10sp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:background="@drawable/bg_badge_terhibahkan"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="4dp"
+                                android:text="TERHIBAHKAN"
+                                android:textColor="#00796B"
+                                android:textSize="10sp"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Rolex\nSubmariner\n2022"
+                            android:textColor="#212529"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:lineSpacingExtra="2dp"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                app:srcCompat="@drawable/ic_person" />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Donor"
+                                    android:textColor="#ADB5BD"
+                                    android:textSize="10sp" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Maya Permata"
+                                    android:textColor="#212529"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="RECEIVING FLOW"
+                                android:textColor="#6C757D"
+                                android:textSize="10sp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:text="100% COMPLETED"
+                                android:textColor="#00796B"
+                                android:textSize="10sp"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="4dp"
+                            android:layout_marginTop="6dp"
+                            android:background="#00796B" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:baselineAligned="false"
+                            android:orientation="horizontal">
+
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                                <ImageView android:layout_width="16dp" android:layout_height="16dp" app:srcCompat="@drawable/ic_step_check" app:tint="#00796B" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Initial" android:textSize="9sp" android:textColor="#00796B" android:textStyle="bold"/>
+                            </LinearLayout>
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                                <ImageView android:layout_width="16dp" android:layout_height="16dp" app:srcCompat="@drawable/ic_step_check" app:tint="#00796B" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="QC" android:textSize="9sp" android:textColor="#00796B" android:textStyle="bold"/>
+                            </LinearLayout>
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                                <ImageView android:layout_width="16dp" android:layout_height="16dp" app:srcCompat="@drawable/ic_step_check" app:tint="#00796B" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Inventory" android:textSize="9sp" android:textColor="#00796B" android:textStyle="bold"/>
+                            </LinearLayout>
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                                <ImageView android:layout_width="16dp" android:layout_height="16dp" app:srcCompat="@drawable/ic_step_check" app:tint="#00796B" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Ready" android:textSize="9sp" android:textColor="#00796B" android:textStyle="bold"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="16dp" android:background="#F1F3F5" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="Active in Store (Out/Q)"
+                                android:textColor="#ADB5BD"
+                                android:textSize="10sp" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginEnd="16dp"
+                                    app:srcCompat="@android:drawable/ic_menu_view"
+                                    app:tint="#6C757D" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/bg_btn_details"
+                                    android:paddingHorizontal="16dp"
+                                    android:paddingVertical="8dp"
+                                    android:text="Details"
+                                    android:textColor="#0056B3"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </RelativeLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Tombol Load More -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/bg_btn_outline_gray"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="10dp"
+                    android:text="Load More Items v"
+                    android:textColor="#6C757D"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- 5. BOTTOM NAVIGATION -->
+    <LinearLayout
+        android:id="@+id/adminBottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:background="#FFFFFF"
+        android:elevation="8dp"
+        android:gravity="center"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:paddingHorizontal="8dp">
+        <!-- DI-FIX: baselineAligned="false" udah ditambahin ke BottomNav -->
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_admin_nav_active"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="10dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:srcCompat="@drawable/ic_nav_home"
+                    app:tint="#FFFFFF" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Home"
+                    android:textColor="#FFFFFF"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_nav_inventory"
+                app:tint="#ADB5BD" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Inventory"
+                android:textColor="#ADB5BD"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_nav_shop"
+                app:tint="#ADB5BD" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Shop"
+                android:textColor="#ADB5BD"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_nav_profile"
+                app:tint="#ADB5BD" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Profile"
+                android:textColor="#ADB5BD"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

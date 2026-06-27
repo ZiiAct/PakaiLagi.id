@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F9FA"
+    tools:ignore="HardcodedText,ContentDescription,SmallSp,UseCompoundDrawables,UselessParent,TooManyViews,Typos,Autofill,TextFields">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="40dp">
+
+            <!-- 1. TOP APP BAR -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="24dp"
+                android:paddingBottom="16dp">
+
+                <ImageView
+                    android:id="@+id/btnBack"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/ic_arrow_back"
+                    app:tint="#0056B3" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_toEndOf="@id/btnBack"
+                    android:text="Item\nInspection"
+                    android:textColor="#0056B3"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:lineSpacingExtra="2dp" />
+
+                <ImageView
+                    android:id="@+id/ivNotification"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/ic_notification"
+                    app:tint="#495057" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="16dp"
+                    android:layout_toStartOf="@id/ivNotification"
+                    android:background="@drawable/bg_badge_id_blue"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp"
+                    android:text="ID: PL-00283"
+                    android:textColor="#0056B3"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <!-- 2. KOTAK PUTIH UTAMA (Isi Konten) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="24dp">
+
+                <!-- Image Gallery -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <!-- Main Image Placeholder -->
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:background="#E9ECEF" />
+
+                        <!-- Dot Indicators -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="12dp"
+                            android:orientation="horizontal">
+                            <View android:layout_width="6dp" android:layout_height="6dp" android:background="#0056B3" />
+                            <View android:layout_width="6dp" android:layout_height="6dp" android:layout_marginStart="6dp" android:background="#ADB5BD" />
+                            <View android:layout_width="6dp" android:layout_height="6dp" android:layout_marginStart="6dp" android:background="#ADB5BD" />
+                        </LinearLayout>
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Thumbnails Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <!-- Thumb 1 (Active) -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="0dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="#0056B3"
+                            android:padding="2dp">
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:background="#E9ECEF" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Thumb 2 -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="0dp">
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:background="#E9ECEF" />
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Thumb 3 -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="0dp">
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:background="#E9ECEF" />
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Thumb +2 -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_thumb_more"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="+2"
+                            android:textColor="#0056B3"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- SECTION: Item Specifications -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="Item Specifications"
+                    android:textColor="#212529"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!-- Spec 1: Brand -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Brand"
+                        android:textColor="#6C757D"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="Canon EOS R6 Mark II"
+                        android:textColor="#212529"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="12dp" android:background="#F1F3F5" />
+
+                <!-- Spec 2: Year -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Year of Purchase"
+                        android:textColor="#6C757D"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="2023"
+                        android:textColor="#212529"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="12dp" android:background="#F1F3F5" />
+
+                <!-- Spec 3: Price -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Original Price"
+                        android:textColor="#6C757D"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="Rp 38.000.000"
+                        android:textColor="#212529"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="12dp" android:background="#F1F3F5" />
+
+                <!-- Spec 4: Condition -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Condition Status"
+                        android:textColor="#6C757D"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="Like New"
+                        android:textColor="#0056B3"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <!-- Donor Description Box -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Donor Description"
+                    android:textColor="#6C757D"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_textarea_gray"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="&quot;Rarely used professional camera. Always stored in a dry box. Body has no scratches, sensor is clean. Includes original battery, charger, and strap. No box available.&quot;"
+                        android:textColor="#495057"
+                        android:textSize="12sp"
+                        android:lineSpacingExtra="4dp" />
+                </LinearLayout>
+
+                <!-- SECTION: Inspection Checklist -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="Inspection\nChecklist"
+                    android:textColor="#212529"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:lineSpacingExtra="2dp"/>
+
+                <!-- Checklist 1: Authenticity -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_textarea_gray"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/bg_badge_id_blue"
+                        android:padding="8dp"
+                        app:srcCompat="@android:drawable/ic_secure"
+                        app:tint="#0056B3" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Authenticity"
+                            android:textColor="#212529"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Check serial numbers &amp; markings"
+                            android:textColor="#6C757D"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="#0056B3" />
+                </LinearLayout>
+
+                <!-- Checklist 2: Physical Condition -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_textarea_gray"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/bg_badge_id_blue"
+                        android:padding="8dp"
+                        app:srcCompat="@android:drawable/ic_menu_manage"
+                        app:tint="#0056B3" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Physical Condition"
+                            android:textColor="#212529"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Surface scratches &amp; impact marks"
+                            android:textColor="#6C757D"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="#0056B3" />
+                </LinearLayout>
+
+                <!-- Checklist 3: Functionality -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_textarea_gray"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/bg_badge_id_blue"
+                        android:padding="8dp"
+                        app:srcCompat="@android:drawable/ic_menu_preferences"
+                        app:tint="#0056B3" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Functionality"
+                            android:textColor="#212529"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Operating as per manufacturer spec"
+                            android:textColor="#6C757D"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="#0056B3" />
+                </LinearLayout>
+
+                <!-- SECTION: Internal Notes -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="Internal Notes / Rejection Reason"
+                    android:textColor="#6C757D"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_textarea_gray"
+                    android:gravity="top|start"
+                    android:hint="Add reason if item is rejected or internal inspection notes..."
+                    android:inputType="textMultiLine"
+                    android:padding="16dp"
+                    android:textColor="#212529"
+                    android:textColorHint="#ADB5BD"
+                    android:textSize="12sp" />
+
+                <!-- ACTION BUTTONS (Udah di-update pake ikon baru!) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/bg_btn_blue_radius8"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingVertical="14dp">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        app:srcCompat="@drawable/ic_check_white"
+                        app:tint="#FFFFFF" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Setujui Hibah"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_btn_outline_red"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingVertical="14dp">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        app:srcCompat="@drawable/ic_close_red"
+                        app:tint="#DC3545" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Tolak Hibah"
+                        android:textColor="#DC3545"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Disclaimer Footer -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:text="Decision cannot be undone after\nsubmission."
+                    android:textColor="#ADB5BD"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
