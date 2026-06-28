@@ -5,10 +5,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 @SuppressWarnings("all")
 public class HomeFragment extends Fragment {
@@ -24,6 +33,9 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Tampilkan nama user dari Firebase
+        loadUserGreeting(view);
 
         View btnDonateNow = view.findViewById(R.id.btnDonateNow);
         if (btnDonateNow != null) btnDonateNow.setOnClickListener(v -> simulateBottomNavClick(R.id.nav_grant_layout));
@@ -67,6 +79,53 @@ public class HomeFragment extends Fragment {
 
             } catch (Exception e) {}
         }
+    }
+
+    private void loadUserGreeting(View view) {
+        TextView tvGreetingName = view.findViewById(R.id.tvGreetingName);
+        if (tvGreetingName == null) return;
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) return;
+
+        // Set nama sementara dari Firebase Auth (jika ada displayName)
+        String authName = currentUser.getDisplayName();
+        if (authName != null && !authName.isEmpty()) {
+            tvGreetingName.setText(authName);
+        } else if (currentUser.getEmail() != null) {
+            // Fallback: ambil bagian sebelum @ dari email
+            String email = currentUser.getEmail();
+            String nameFromEmail = email.contains("@") ? email.substring(0, email.indexOf('@')) : email;
+            tvGreetingName.setText(nameFromEmail);
+        }
+
+        // Ambil nama dari Realtime Database (lebih akurat)
+        DatabaseReference userRef = FirebaseDatabase.getInstance()
+                .getReference("users")
+                .child(currentUser.getUid());
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String fullName = snapshot.child("fullName").getValue(String.class);
+                    if (fullName != null && !fullName.isEmpty()) {
+                        tvGreetingName.setText(fullName);
+                        return;
+                    }
+                    // Fallback ke username jika fullName kosong
+                    String username = snapshot.child("username").getValue(String.class);
+                    if (username != null && !username.isEmpty()) {
+                        tvGreetingName.setText(username);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Biarkan nama yang sudah di-set dari fallback di atas
+            }
+        });
     }
 
     private void simulateBottomNavClick(int navId) {

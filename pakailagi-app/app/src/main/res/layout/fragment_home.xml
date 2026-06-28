@@ -40,6 +40,7 @@
                         android:textStyle="bold"
                         android:textColor="#212529"/>
                     <TextView
+                        android:id="@+id/tvGreetingName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/home_username_dummy"

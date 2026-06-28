@@ -8,11 +8,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 @SuppressWarnings("all")
 public class ProfilFragment extends Fragment {
@@ -28,6 +37,9 @@ public class ProfilFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Load data profil dari Firebase
+        loadUserProfile(view);
 
         View btnBack = view.findViewById(R.id.btnBackProfil);
         if (btnBack != null) btnBack.setOnClickListener(v -> simulateNav(R.id.nav_home_layout));
@@ -63,22 +75,79 @@ public class ProfilFragment extends Fragment {
             LinearLayout layoutDukungan = (LinearLayout) cardDukungan.getChildAt(0);
             layoutDukungan.getChildAt(0).setOnClickListener(v -> Toast.makeText(getContext(), "Membuka Pusat Bantuan...", Toast.LENGTH_SHORT).show());
 
-            // LOGOUT SAKTI (ANTI BLACKOUT)
+            // LOGOUT
             layoutDukungan.getChildAt(2).setOnClickListener(v -> {
                 try {
+                    FirebaseAuth.getInstance().signOut();
                     Toast.makeText(getContext(), "Logout Berhasil!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     if (getActivity() != null) getActivity().finish();
                 } catch (Exception ex) {
-                    // Kalau LoginActivity belum didaftarin di Manifest, cegah layar hitam!
                     Toast.makeText(getContext(), "SYSTEM INFO: Gagal ke halaman Login (Cek AndroidManifest.xml). Kembali ke Beranda.", Toast.LENGTH_LONG).show();
                     simulateNav(R.id.nav_home_layout);
                 }
             });
 
         } catch (Exception e) {}
+    }
+
+    private void loadUserProfile(View view) {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) return;
+
+        TextView tvProfilName = view.findViewById(R.id.tvProfilName);
+        TextView tvProfilUniversity = view.findViewById(R.id.tvProfilUniversity);
+
+        // Set sementara dari Firebase Auth sebagai fallback
+        if (tvProfilName != null) {
+            String authName = currentUser.getDisplayName();
+            if (authName != null && !authName.isEmpty()) {
+                tvProfilName.setText(authName);
+            }
+        }
+        if (tvProfilUniversity != null && currentUser.getEmail() != null) {
+            tvProfilUniversity.setText(currentUser.getEmail());
+        }
+
+        DatabaseReference userRef = FirebaseDatabase.getInstance()
+                .getReference("users")
+                .child(currentUser.getUid());
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // Tampilkan Full Name
+                    String fullName = snapshot.child("fullName").getValue(String.class);
+                    if (tvProfilName != null && fullName != null && !fullName.isEmpty()) {
+                        tvProfilName.setText(fullName);
+                    }
+
+                    // Tampilkan Username sebagai sub-info (di posisi university)
+                    String username = snapshot.child("username").getValue(String.class);
+                    String email = snapshot.child("email").getValue(String.class);
+                    if (tvProfilUniversity != null) {
+                        String subText = "";
+                        if (username != null && !username.isEmpty()) {
+                            subText = "@" + username;
+                        }
+                        if (email != null && !email.isEmpty()) {
+                            subText = subText.isEmpty() ? email : subText + " • " + email;
+                        }
+                        if (!subText.isEmpty()) {
+                            tvProfilUniversity.setText(subText);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Data dari Firebase Auth sudah di-set sebagai fallback
+            }
+        });
     }
 
     private void simulateNav(int navId) {

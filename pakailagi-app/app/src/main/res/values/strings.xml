@@ -6,7 +6,7 @@
     <string name="login_welcome">Welcome Back</string>
     <string name="login_desc_text">Log in to manage your pawns and secure\ntransactions.</string>
     <string name="email_phone_label">Email or Phone Number</string>
-    <string name="email_phone_hint">Enter your credentials</string>
+    <string name="email_phone_hint">Username/Email</string>
     <string name="pass_label">Password</string>
     <string name="forgot_pass_text">Forgot Password?</string>
     <string name="pass_hint">••••••••</string>
