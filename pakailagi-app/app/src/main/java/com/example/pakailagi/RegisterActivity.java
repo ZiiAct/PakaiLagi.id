@@ -113,6 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
                             userData.put("username", username);
                             userData.put("email", email);
                             userData.put("uid", user.getUid());
+                            userData.put("role", "user");
 
                             mDatabase.child("users").child(user.getUid()).setValue(userData)
                                     .addOnCompleteListener(dbTask -> {
