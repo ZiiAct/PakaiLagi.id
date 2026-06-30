@@ -46,7 +46,7 @@ public class HibahFragment extends Fragment {
     // Ganti dengan URL server Render kamu setelah deploy
     // Contoh: "https://pakailagi-server.onrender.com"
     // Untuk emulator lokal gunakan: "http://10.0.2.2:8080"
-    private static final String SERVER_BASE_URL = "http://10.0.2.2:8080";
+    private static final String SERVER_BASE_URL = "https://pakailagi-id.onrender.com";
     private static final String UPLOAD_URL = SERVER_BASE_URL + "/api/hibah/upload";
 
     private Uri selectedImageUri = null;
@@ -69,11 +69,13 @@ public class HibahFragment extends Fragment {
     // Referensi ImageView disimpan di field agar bisa diakses dari launcher
     private ImageView ivImage = null;
 
-    public HibahFragment() {}
+    public HibahFragment() {
+    }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_hibah, container, false);
     }
 
@@ -105,7 +107,7 @@ public class HibahFragment extends Fragment {
             View dropdownKategori = mainLayout.getChildAt(11);
             TextView tvKategori = (TextView) ((android.widget.RelativeLayout) dropdownKategori).getChildAt(0);
             dropdownKategori.setOnClickListener(v -> {
-                String[] categories = {"Elektronik", "Perabotan", "Buku", "Olahraga", "Lainnya"};
+                String[] categories = { "Elektronik", "Perabotan", "Buku", "Olahraga", "Lainnya" };
                 new AlertDialog.Builder(getContext())
                         .setTitle("Pilih Kategori")
                         .setItems(categories, (dialog, which) -> {
@@ -157,8 +159,10 @@ public class HibahFragment extends Fragment {
     }
 
     /**
-     * Meng-copy InputStream dari ContentResolver ke file sementara di cache directory.
-     * Ini lebih reliable daripada getRealPathFromURI yang tidak bisa digunakan di Android 10+.
+     * Meng-copy InputStream dari ContentResolver ke file sementara di cache
+     * directory.
+     * Ini lebih reliable daripada getRealPathFromURI yang tidak bisa digunakan di
+     * Android 10+.
      *
      * @param uri URI gambar yang dipilih dari galeri
      * @return File sementara yang berisi data gambar, atau null jika gagal
@@ -167,7 +171,8 @@ public class HibahFragment extends Fragment {
         try {
             ContentResolver contentResolver = requireActivity().getContentResolver();
             InputStream inputStream = contentResolver.openInputStream(uri);
-            if (inputStream == null) return null;
+            if (inputStream == null)
+                return null;
 
             // Buat file sementara di cache directory
             File tempFile = new File(requireActivity().getCacheDir(), "upload_" + System.currentTimeMillis() + ".jpg");
@@ -192,13 +197,15 @@ public class HibahFragment extends Fragment {
 
     /**
      * Mengirim gambar ke endpoint Spring Boot menggunakan OkHttp multipart.
-     * Setelah berhasil mendapat URL dari server, simpan data hibah ke Firebase Realtime Database.
+     * Setelah berhasil mendapat URL dari server, simpan data hibah ke Firebase
+     * Realtime Database.
      * Dijalankan di background thread (enqueue) agar UI tidak freeze.
      *
      * @param imageUri URI gambar yang dipilih dari galeri
      */
     private void uploadKeServer(Uri imageUri) {
-        // Gunakan ContentResolver + temp file (compatible dengan Android 10+ Scoped Storage)
+        // Gunakan ContentResolver + temp file (compatible dengan Android 10+ Scoped
+        // Storage)
         File imageFile = copyUriToTempFile(imageUri);
         if (imageFile == null || !imageFile.exists()) {
             Toast.makeText(getContext(), "Tidak bisa membaca file gambar!", Toast.LENGTH_SHORT).show();
@@ -207,14 +214,14 @@ public class HibahFragment extends Fragment {
 
         OkHttpClient client = new OkHttpClient();
 
-        // Bangun multipart request body (hanya file, data lain disimpan langsung ke Firebase)
+        // Bangun multipart request body (hanya file, data lain disimpan langsung ke
+        // Firebase)
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart(
                         "file",
                         imageFile.getName(),
-                        RequestBody.create(imageFile, MediaType.parse("image/*"))
-                )
+                        RequestBody.create(imageFile, MediaType.parse("image/*")))
                 .build();
 
         Request request = new Request.Builder()
@@ -230,11 +237,9 @@ public class HibahFragment extends Fragment {
                 imageFile.delete();
 
                 if (getActivity() != null) {
-                    getActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(),
-                                    "Gagal terhubung ke server. Cek koneksi & IP server.",
-                                    Toast.LENGTH_LONG).show()
-                    );
+                    getActivity().runOnUiThread(() -> Toast.makeText(getContext(),
+                            "Gagal terhubung ke server. Cek koneksi & IP server.",
+                            Toast.LENGTH_LONG).show());
                 }
             }
 
@@ -243,7 +248,8 @@ public class HibahFragment extends Fragment {
                 // Hapus file sementara
                 imageFile.delete();
 
-                if (getActivity() == null) return;
+                if (getActivity() == null)
+                    return;
 
                 if (response.isSuccessful() && response.body() != null) {
                     // Server mengembalikan URL gambar Google Drive
@@ -253,18 +259,17 @@ public class HibahFragment extends Fragment {
                     simpanKeFirebase(imageUrl);
                 } else {
                     String errorBody = response.body() != null ? response.body().string() : "Unknown error";
-                    getActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(),
-                                    "Upload gagal: " + errorBody,
-                                    Toast.LENGTH_LONG).show()
-                    );
+                    getActivity().runOnUiThread(() -> Toast.makeText(getContext(),
+                            "Upload gagal: " + errorBody,
+                            Toast.LENGTH_LONG).show());
                 }
             }
         });
     }
 
     /**
-     * Menyimpan data hibah ke Firebase Realtime Database setelah upload gambar berhasil.
+     * Menyimpan data hibah ke Firebase Realtime Database setelah upload gambar
+     * berhasil.
      * Data disimpan di node "/hibah_items/{pushId}".
      *
      * @param imageUrl URL gambar publik dari Google Drive
@@ -294,17 +299,16 @@ public class HibahFragment extends Fragment {
                                     Toast.LENGTH_LONG).show();
                             // Kembali ke halaman Home
                             View homeNav = getActivity().findViewById(R.id.nav_home_layout);
-                            if (homeNav != null) homeNav.performClick();
+                            if (homeNav != null)
+                                homeNav.performClick();
                         });
                     }
                 })
                 .addOnFailureListener(e -> {
                     if (getActivity() != null) {
-                        getActivity().runOnUiThread(() ->
-                                Toast.makeText(getContext(),
-                                        "Gagal menyimpan ke database: " + e.getMessage(),
-                                        Toast.LENGTH_LONG).show()
-                        );
+                        getActivity().runOnUiThread(() -> Toast.makeText(getContext(),
+                                "Gagal menyimpan ke database: " + e.getMessage(),
+                                Toast.LENGTH_LONG).show());
                     }
                 });
     }
