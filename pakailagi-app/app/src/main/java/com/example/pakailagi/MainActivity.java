@@ -10,10 +10,14 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import com.example.pakailagi.model.WishlistItem;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("all")
 public class MainActivity extends AppCompatActivity {
 
+    private final List<WishlistItem> wishlistItems = new ArrayList<>();
     private LinearLayout navHome, navSearch, navGrant, navWishlist, navAccount;
     private ImageView ivHome, ivSearch, ivGrant, ivWishlist, ivAccount;
     private TextView tvHome, tvSearch, tvGrant, tvWishlist, tvAccount;
@@ -72,14 +76,47 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showDetailBarang(String name, String location) {
+        showDetailBarang(name, location, "Bekas Layak");
+    }
+
+    public void showDetailBarang(String name, String location, String condition) {
         try {
             View bottomNav = findViewById(R.id.custom_bottom_nav);
             if (bottomNav != null) bottomNav.setVisibility(View.GONE);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new DetailBarangFragment())
+                    .replace(R.id.fragment_container, DetailBarangFragment.newInstance(name, location, condition))
                     .addToBackStack(null)
                     .commit();
         } catch (Exception e) {}
+    }
+
+    public boolean addItemToWishlist(String name, String location, String condition) {
+        for (WishlistItem item : wishlistItems) {
+            if (item.getName().equals(name) && item.getLocation().equals(location)) {
+                return false;
+            }
+        }
+        wishlistItems.add(new WishlistItem(name, location, condition));
+        return true;
+    }
+
+    public boolean isItemInWishlist(String name, String location) {
+        for (WishlistItem item : wishlistItems) {
+            if (item.getName().equals(name) && item.getLocation().equals(location)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<WishlistItem> getWishlistItems() {
+        return wishlistItems;
+    }
+
+    public void removeWishlistItem(int position) {
+        if (position >= 0 && position < wishlistItems.size()) {
+            wishlistItems.remove(position);
+        }
     }
 
     public void hideDetailBarang() {

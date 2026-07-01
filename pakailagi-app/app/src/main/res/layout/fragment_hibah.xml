@@ -52,6 +52,7 @@
                 android:orientation="vertical"
                 android:gravity="center">
                 <TextView
+                    android:id="@+id/tvStep1Circle"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:background="@drawable/bg_step_active"
@@ -61,6 +62,7 @@
                     android:textSize="12sp"
                     android:textStyle="bold" />
                 <TextView
+                    android:id="@+id/tvStep1Label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -83,6 +85,7 @@
                 android:orientation="vertical"
                 android:gravity="center">
                 <TextView
+                    android:id="@+id/tvStep2Circle"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:background="@drawable/bg_step_inactive"
@@ -92,6 +95,7 @@
                     android:textSize="12sp"
                     android:textStyle="bold" />
                 <TextView
+                    android:id="@+id/tvStep2Label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -113,6 +117,7 @@
                 android:orientation="vertical"
                 android:gravity="center">
                 <TextView
+                    android:id="@+id/tvStep3Circle"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:background="@drawable/bg_step_inactive"
@@ -122,6 +127,7 @@
                     android:textSize="12sp"
                     android:textStyle="bold" />
                 <TextView
+                    android:id="@+id/tvStep3Label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -208,23 +214,29 @@
 
         <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F4F8" android:layout_marginTop="24dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/layoutStepInfo"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Detail Barang"
-            android:textColor="#212529"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Nama Barang"
-            android:textColor="#495057"
-            android:textSize="10sp"
-            android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Detail Barang"
+                android:textColor="#212529"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Nama Barang"
+                android:textColor="#495057"
+                android:textSize="10sp"
+                android:textStyle="bold" />
 
         <EditText
             android:id="@+id/etNamaBarang"
@@ -374,16 +386,24 @@
             android:inputType="phone"
             android:importantForAutofill="no" />
 
-        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F4F8" android:layout_marginTop="24dp" />
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F4F8" android:layout_marginTop="24dp" />
+        </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/layoutStepLocation"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Instruksi Pengambilan"
-            android:textColor="#212529"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Instruksi Pengambilan"
+                android:textColor="#212529"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
         <TextView
             android:layout_width="match_parent"
@@ -446,13 +466,27 @@
             android:textStyle="bold" />
 
         <EditText
+            android:id="@+id/etLokasiPengambilan"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/bg_input_outline"
+            android:hint="Contoh: Ambil di lobby Kost Pelangi"
+            android:textColorHint="#A0AAB5"
+            android:paddingHorizontal="16dp"
+            android:textColor="#212529"
+            android:textSize="12sp"
+            android:inputType="text"
+            android:importantForAutofill="no" />
+
+        <EditText
             android:id="@+id/etLokasiWaktu"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/bg_input_outline"
             android:gravity="top|start"
-            android:hint="Contoh: Ambil di lobby Kost Pelangi jam 5 sore"
+            android:hint="Contoh: jam 5 sore atau setelah kerja"
             android:textColorHint="#A0AAB5"
             android:padding="16dp"
             android:textColor="#212529"
@@ -460,7 +494,41 @@
             android:inputType="textMultiLine"
             android:importantForAutofill="no" />
 
-        <View android:layout_width="match_parent" android:layout_height="24dp" />
+            <View android:layout_width="match_parent" android:layout_height="24dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutStepDone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:paddingTop="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Selesai"
+                android:textColor="#212529"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Semua informasi sudah diisi. Tekan Kirim Hibah untuk menyelesaikan proses." 
+                android:textColor="#6C757D"
+                android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Pastikan nama barang, deskripsi, kontak, lokasi pengambilan, dan waktu sudah benar."
+                android:textColor="#6C757D"
+                android:textSize="11sp" />
+        </LinearLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/btnSubmitHibah"
@@ -482,10 +550,11 @@
                     android:src="@drawable/ic_logo_utama" />
 
                 <TextView
+                    android:id="@+id/tvSubmitText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Hibahkan Sekarang"
+                    android:text="Lanjutkan"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
                     android:textStyle="bold" />

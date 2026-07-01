@@ -13,6 +13,9 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.pakailagi.adapter.WishlistAdapter;
+import com.example.pakailagi.model.WishlistItem;
+import java.util.List;
 
 @SuppressWarnings("all")
 public class WishlistFragment extends Fragment {
@@ -67,7 +70,33 @@ public class WishlistFragment extends Fragment {
         RecyclerView rvWishlist = view.findViewById(R.id.rvWishlistItems);
         if (rvWishlist != null) {
             rvWishlist.setLayoutManager(new LinearLayoutManager(getContext()));
-            rvWishlist.setAdapter(new DummyWishlistAdapter());
+            List<WishlistItem> items = null;
+            if (getActivity() instanceof MainActivity) {
+                items = ((MainActivity) getActivity()).getWishlistItems();
+            }
+            if (items == null) items = new java.util.ArrayList<>();
+            WishlistAdapter adapter = new WishlistAdapter(items, new WishlistAdapter.OnItemActionListener() {
+                @Override
+                public void onDelete(int position) {
+                    if (getActivity() instanceof MainActivity) {
+                        ((MainActivity) getActivity()).removeWishlistItem(position);
+                        rvWishlist.getAdapter().notifyItemRemoved(position);
+                    }
+                }
+
+                @Override
+                public void onViewDetail(WishlistItem item) {
+                    if (getActivity() instanceof MainActivity) {
+                        ((MainActivity) getActivity()).showDetailBarang(item.getName(), item.getLocation(), item.getCondition());
+                    }
+                }
+
+                @Override
+                public void onApply(WishlistItem item) {
+                    Toast.makeText(getContext(), "Permintaan diajukan untuk " + item.getName(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            rvWishlist.setAdapter(adapter);
         }
 
         RecyclerView rvSuggestions = view.findViewById(R.id.rvSuggestions);

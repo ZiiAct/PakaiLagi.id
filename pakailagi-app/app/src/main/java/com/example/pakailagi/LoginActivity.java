@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -99,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(this, "Login Sukses!", Toast.LENGTH_SHORT).show();
-                        goToMain();
+                        goToRoleBasedActivity();
                     } else {
                         Exception e = task.getException();
                         if (e instanceof FirebaseAuthInvalidUserException
@@ -108,6 +109,41 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(this, "Password atau Username salah", Toast.LENGTH_LONG).show();
                         }
+                    }
+                });
+    }
+
+    private void goToRoleBasedActivity() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
+            return;
+        }
+
+        String uid = currentUser.getUid();
+        mDatabase.child("users").child(uid).child("role")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        String role = snapshot.getValue(String.class);
+                        Intent intent;
+                        if (role != null && role.equalsIgnoreCase("admin")) {
+                            intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
+                        } else {
+                            intent = new Intent(LoginActivity.this, MainActivity.class);
+                        }
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        Toast.makeText(LoginActivity.this,
+                                "Login sukses, tetapi gagal membaca role. Masuk sebagai user.",
+                                Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
                     }
                 });
     }
