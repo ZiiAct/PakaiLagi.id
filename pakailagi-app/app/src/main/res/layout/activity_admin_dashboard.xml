@@ -52,6 +52,7 @@
                     app:srcCompat="@drawable/ic_person" />
 
                 <ImageView
+                    android:id="@+id/icon_notification"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_centerVertical="true"
@@ -296,6 +297,7 @@
                     app:tint="#ADB5BD" />
 
                 <EditText
+                    android:id="@+id/et_search"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -334,6 +336,7 @@
         android:paddingHorizontal="8dp">
 
         <LinearLayout
+            android:id="@+id/nav_home"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -366,6 +369,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/nav_inventory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -387,6 +391,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/nav_shop"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -408,6 +413,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/nav_profile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
