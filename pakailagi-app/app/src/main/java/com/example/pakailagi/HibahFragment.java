@@ -5,9 +5,12 @@ import android.content.ContentResolver;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +33,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -43,13 +48,29 @@ import okhttp3.Response;
 @SuppressWarnings("all")
 public class HibahFragment extends Fragment {
 
-    // Ganti dengan URL server Render kamu setelah deploy
-    // Contoh: "https://pakailagi-server.onrender.com"
-    // Untuk emulator lokal gunakan: "http://10.0.2.2:8080"
+    private static final String TAG = "HibahFragment";
+
+    // URL server Spring Boot (Render)
     private static final String SERVER_BASE_URL = "https://pakailagi-id.onrender.com";
     private static final String UPLOAD_URL = SERVER_BASE_URL + "/api/hibah/upload";
 
     private Uri selectedImageUri = null;
+
+    // Referensi view yang diakses dari dalam lambda
+    private ImageView ivImage = null;
+    private CardView cardPreviewImage = null;
+
+    private View layoutStepInfo = null;
+    private View layoutStepLocation = null;
+    private View layoutStepDone = null;
+    private TextView tvStep1Circle = null;
+    private TextView tvStep1Label = null;
+    private TextView tvStep2Circle = null;
+    private TextView tvStep2Label = null;
+    private TextView tvStep3Circle = null;
+    private TextView tvStep3Label = null;
+    private TextView tvSubmitText = null;
+    private int currentStep = 1;
 
     // Launcher untuk membuka galeri foto
     private final ActivityResultLauncher<String> getContent = registerForActivityResult(
@@ -57,17 +78,16 @@ public class HibahFragment extends Fragment {
             uri -> {
                 if (uri != null) {
                     selectedImageUri = uri;
-                    // Tampilkan gambar yang dipilih ke ImageView di layout
                     if (ivImage != null) {
                         ivImage.setImageURI(uri);
-                        ivImage.setColorFilter(null); // Hapus filter warna sebelumnya
+                    }
+                    // Tampilkan CardView preview gambar
+                    if (cardPreviewImage != null) {
+                        cardPreviewImage.setVisibility(View.VISIBLE);
                     }
                     Toast.makeText(getContext(), "Gambar dipilih!", Toast.LENGTH_SHORT).show();
                 }
             });
-
-    // Referensi ImageView disimpan di field agar bisa diakses dari launcher
-    private ImageView ivImage = null;
 
     public HibahFragment() {
     }
@@ -83,79 +103,123 @@ public class HibahFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        try {
-            ImageView ivImageView = view.findViewById(R.id.ivImage);
-            if (ivImageView != null) {
-                ivImage = ivImageView;
-            }
+        // Inisialisasi semua view
+        ivImage = view.findViewById(R.id.ivImage);
+        cardPreviewImage = view.findViewById(R.id.cardPreviewImage);
 
-            EditText etNamaBarang = view.findViewById(R.id.etNamaBarang);
-            TextView tvKategori = view.findViewById(R.id.tvKategori);
-            View layoutKategori = view.findViewById(R.id.layoutKategori);
-            EditText etDeskripsiBarang = view.findViewById(R.id.etDeskripsiBarang);
-            EditText etLokasiWaktu = view.findViewById(R.id.etLokasiWaktu);
-            TextView chipPickup = view.findViewById(R.id.chipPickup);
-            TextView chipCOD = view.findViewById(R.id.chipCOD);
-            TextView chipKurir = view.findViewById(R.id.chipKurir);
-            CardView btnSubmit = view.findViewById(R.id.btnSubmitHibah);
+        EditText etNamaBarang = view.findViewById(R.id.etNamaBarang);
+        TextView tvKategori = view.findViewById(R.id.tvKategori);
+        View layoutKategori = view.findViewById(R.id.layoutKategori);
+        EditText etDeskripsiBarang = view.findViewById(R.id.etDeskripsiBarang);
+        EditText etKontakHibah = view.findViewById(R.id.etKontakHibah);
+        EditText etLokasiPengambilan = view.findViewById(R.id.etLokasiPengambilan);
+        EditText etLokasiWaktu = view.findViewById(R.id.etLokasiWaktu);
 
-            View boxUtama = view.findViewById(R.id.boxUtama);
-            if (boxUtama != null) {
-                boxUtama.setOnClickListener(v -> getContent.launch("image/*"));
-            }
+        // Chip pengiriman
+        TextView chipPickup = view.findViewById(R.id.chipPickup);
+        TextView chipCOD = view.findViewById(R.id.chipCOD);
+        TextView chipKurir = view.findViewById(R.id.chipKurir);
 
-            if (layoutKategori != null && tvKategori != null) {
-                layoutKategori.setOnClickListener(v -> {
-                    String[] categories = { "Elektronik", "Perabotan", "Buku", "Olahraga", "Lainnya" };
-                    new AlertDialog.Builder(getContext())
-                            .setTitle("Pilih Kategori")
-                            .setItems(categories, (dialog, which) -> {
-                                tvKategori.setText(categories[which]);
-                                tvKategori.setTextColor(Color.parseColor("#212529"));
-                            }).show();
-                });
-            }
+        // Chip kondisi barang
+        TextView chipGood = view.findViewById(R.id.chipGood);
+        TextView chipFair = view.findViewById(R.id.chipFair);
+        TextView chipPoor = view.findViewById(R.id.chipPoor);
 
-            View.OnClickListener chipListener = v -> {
-                if (chipPickup != null) {
-                    chipPickup.setBackgroundResource(R.drawable.bg_chip_outline_grey);
-                    chipPickup.setTextColor(Color.parseColor("#6C757D"));
+        layoutStepInfo = view.findViewById(R.id.layoutStepInfo);
+        layoutStepLocation = view.findViewById(R.id.layoutStepLocation);
+        layoutStepDone = view.findViewById(R.id.layoutStepDone);
+        tvStep1Circle = view.findViewById(R.id.tvStep1Circle);
+        tvStep1Label = view.findViewById(R.id.tvStep1Label);
+        tvStep2Circle = view.findViewById(R.id.tvStep2Circle);
+        tvStep2Label = view.findViewById(R.id.tvStep2Label);
+        tvStep3Circle = view.findViewById(R.id.tvStep3Circle);
+        tvStep3Label = view.findViewById(R.id.tvStep3Label);
+        CardView btnSubmit = view.findViewById(R.id.btnSubmitHibah);
+        tvSubmitText = view.findViewById(R.id.tvSubmitText);
+
+        // Pastikan card preview awalnya tersembunyi
+        if (cardPreviewImage != null) {
+            cardPreviewImage.setVisibility(View.GONE);
+        }
+        showStep(1);
+
+        // Klik box utama → buka galeri
+        View boxUtama = view.findViewById(R.id.boxUtama);
+        if (boxUtama != null) {
+            boxUtama.setOnClickListener(v -> getContent.launch("image/*"));
+        }
+
+        // Pilih Kategori via dialog
+        if (layoutKategori != null && tvKategori != null) {
+            layoutKategori.setOnClickListener(v -> {
+                String[] categories = { "Elektronik", "Perabotan", "Buku", "Olahraga", "Pakaian", "Lainnya" };
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Pilih Kategori")
+                        .setItems(categories, (dialog, which) -> {
+                            tvKategori.setText(categories[which]);
+                            tvKategori.setTextColor(Color.parseColor("#212529"));
+                        }).show();
+            });
+        }
+
+        // Listener chip pengiriman — satu aktif, lainnya non-aktif
+        View.OnClickListener deliveryChipListener = v -> {
+            resetChip(chipPickup);
+            resetChip(chipCOD);
+            resetChip(chipKurir);
+            activateChip((TextView) v);
+        };
+        if (chipPickup != null)
+            chipPickup.setOnClickListener(deliveryChipListener);
+        if (chipCOD != null)
+            chipCOD.setOnClickListener(deliveryChipListener);
+        if (chipKurir != null)
+            chipKurir.setOnClickListener(deliveryChipListener);
+
+        // Listener chip kondisi barang
+        View.OnClickListener conditionChipListener = v -> {
+            resetChip(chipGood);
+            resetChip(chipFair);
+            resetChip(chipPoor);
+            activateChip((TextView) v);
+        };
+        if (chipGood != null)
+            chipGood.setOnClickListener(conditionChipListener);
+        if (chipFair != null)
+            chipFair.setOnClickListener(conditionChipListener);
+        if (chipPoor != null)
+            chipPoor.setOnClickListener(conditionChipListener);
+
+        // Submit
+        if (btnSubmit != null) {
+            btnSubmit.setOnClickListener(v -> {
+                String namaBarang = etNamaBarang != null ? etNamaBarang.getText().toString().trim() : "";
+                String kategori = (tvKategori != null && !tvKategori.getText().toString().equals("Pilih Kategori"))
+                        ? tvKategori.getText().toString().trim()
+                        : "Lainnya";
+                String deskripsi = etDeskripsiBarang != null ? etDeskripsiBarang.getText().toString().trim() : "";
+                String kontak = etKontakHibah != null ? etKontakHibah.getText().toString().trim() : "";
+                String lokasiPengambilan = etLokasiPengambilan != null ? etLokasiPengambilan.getText().toString().trim() : "";
+                String lokasiWaktu = etLokasiWaktu != null ? etLokasiWaktu.getText().toString().trim() : "";
+
+                // Baca kondisi barang dari chip yang aktif (textColor putih = aktif)
+                String kondisiBarang = "Good";
+                if (chipFair != null && chipFair.getCurrentTextColor() == Color.WHITE) {
+                    kondisiBarang = "Fair";
+                } else if (chipPoor != null && chipPoor.getCurrentTextColor() == Color.WHITE) {
+                    kondisiBarang = "Poor";
                 }
-                if (chipCOD != null) {
-                    chipCOD.setBackgroundResource(R.drawable.bg_chip_outline_grey);
-                    chipCOD.setTextColor(Color.parseColor("#6C757D"));
-                }
-                if (chipKurir != null) {
-                    chipKurir.setBackgroundResource(R.drawable.bg_chip_outline_grey);
-                    chipKurir.setTextColor(Color.parseColor("#6C757D"));
-                }
 
-                TextView clicked = (TextView) v;
-                clicked.setBackgroundResource(R.drawable.bg_chip_green_solid);
-                clicked.setTextColor(Color.WHITE);
-            };
+                // Baca opsi pengiriman dari chip aktif
+                String deliveryOption = "Pick Up Langsung";
+                if (chipCOD != null && chipCOD.getCurrentTextColor() == Color.WHITE)
+                    deliveryOption = "Ketemuan (COD)";
+                if (chipKurir != null && chipKurir.getCurrentTextColor() == Color.WHITE)
+                    deliveryOption = "Kirim via Kurir";
+                if (chipPickup != null && chipPickup.getCurrentTextColor() == Color.WHITE)
+                    deliveryOption = "Pick Up Langsung";
 
-            if (chipPickup != null) chipPickup.setOnClickListener(chipListener);
-            if (chipCOD != null) chipCOD.setOnClickListener(chipListener);
-            if (chipKurir != null) chipKurir.setOnClickListener(chipListener);
-
-            if (btnSubmit != null) {
-                btnSubmit.setOnClickListener(v -> {
-                    String namaBarang = etNamaBarang != null ? etNamaBarang.getText().toString().trim() : "";
-                    String kategori = tvKategori != null ? tvKategori.getText().toString().trim() : "Lainnya";
-                    String deskripsi = etDeskripsiBarang != null ? etDeskripsiBarang.getText().toString().trim() : "";
-                    String lokasiWaktu = etLokasiWaktu != null ? etLokasiWaktu.getText().toString().trim() : "";
-                    String deliveryOption = "Pick Up Langsung";
-
-                    if (chipCOD != null && chipCOD.getCurrentTextColor() == Color.WHITE) {
-                        deliveryOption = "Ketemuan (COD)";
-                    } else if (chipKurir != null && chipKurir.getCurrentTextColor() == Color.WHITE) {
-                        deliveryOption = "Kirim via Kurir";
-                    }
-                    if (chipPickup != null && chipPickup.getCurrentTextColor() == Color.WHITE) {
-                        deliveryOption = "Pick Up Langsung";
-                    }
-
+                if (currentStep == 1) {
                     if (TextUtils.isEmpty(namaBarang)) {
                         Toast.makeText(getContext(), "Isi nama barang terlebih dahulu.", Toast.LENGTH_SHORT).show();
                         return;
@@ -164,42 +228,150 @@ public class HibahFragment extends Fragment {
                         Toast.makeText(getContext(), "Isi deskripsi barang terlebih dahulu.", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if (TextUtils.isEmpty(lokasiWaktu)) {
-                        Toast.makeText(getContext(), "Isi lokasi / waktu pengambilan terlebih dahulu.", Toast.LENGTH_SHORT).show();
+                    if (TextUtils.isEmpty(kontak)) {
+                        Toast.makeText(getContext(), "Isi nomor kontak terlebih dahulu.", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     if (selectedImageUri == null) {
-                        Toast.makeText(getContext(), "Pilih gambar dulu!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Pilih gambar barang terlebih dahulu!", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    uploadKeServer(selectedImageUri, namaBarang, kategori, deskripsi, deliveryOption, lokasiWaktu);
-                });
-            }
+                    currentStep = 2;
+                    showStep(currentStep);
+                    return;
+                }
 
-        } catch (Exception e) {
-            // Silent catch untuk mencegah crash jika struktur layout berubah
+                if (currentStep == 2) {
+                    if (TextUtils.isEmpty(lokasiPengambilan)) {
+                        Toast.makeText(getContext(), "Isi lokasi pengambilan terlebih dahulu.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (TextUtils.isEmpty(lokasiWaktu)) {
+                        Toast.makeText(getContext(), "Isi detail lokasi/waktu terlebih dahulu.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    currentStep = 3;
+                    showStep(currentStep);
+                    Toast.makeText(getContext(), "Semua langkah sudah terisi, tekan sekali lagi untuk submit.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (currentStep == 3) {
+                    if (TextUtils.isEmpty(namaBarang)) {
+                        Toast.makeText(getContext(), "Isi nama barang terlebih dahulu.", Toast.LENGTH_SHORT).show();
+                        currentStep = 1;
+                        showStep(currentStep);
+                        return;
+                    }
+                    if (TextUtils.isEmpty(deskripsi)) {
+                        Toast.makeText(getContext(), "Isi deskripsi barang terlebih dahulu.", Toast.LENGTH_SHORT).show();
+                        currentStep = 1;
+                        showStep(currentStep);
+                        return;
+                    }
+                    if (TextUtils.isEmpty(kontak)) {
+                        Toast.makeText(getContext(), "Isi nomor kontak terlebih dahulu.", Toast.LENGTH_SHORT).show();
+                        currentStep = 1;
+                        showStep(currentStep);
+                        return;
+                    }
+                    if (selectedImageUri == null) {
+                        Toast.makeText(getContext(), "Pilih gambar barang terlebih dahulu!", Toast.LENGTH_SHORT).show();
+                        currentStep = 1;
+                        showStep(currentStep);
+                        return;
+                    }
+                    if (TextUtils.isEmpty(lokasiPengambilan)) {
+                        Toast.makeText(getContext(), "Isi lokasi pengambilan terlebih dahulu.", Toast.LENGTH_SHORT).show();
+                        currentStep = 2;
+                        showStep(currentStep);
+                        return;
+                    }
+                    if (TextUtils.isEmpty(lokasiWaktu)) {
+                        Toast.makeText(getContext(), "Isi detail lokasi/waktu terlebih dahulu.", Toast.LENGTH_SHORT).show();
+                        currentStep = 2;
+                        showStep(currentStep);
+                        return;
+                    }
+
+                    Toast.makeText(getContext(), "Mengupload gambar ke server...", Toast.LENGTH_SHORT).show();
+                    uploadKeServer(selectedImageUri, namaBarang, kategori, deskripsi,
+                            kondisiBarang, deliveryOption, lokasiWaktu, lokasiPengambilan, kontak);
+                }
+            });
         }
     }
 
+    private void showStep(int step) {
+        currentStep = step;
+
+        if (layoutStepInfo != null && layoutStepLocation != null && layoutStepDone != null) {
+            layoutStepInfo.setVisibility(step == 1 ? View.VISIBLE : View.GONE);
+            layoutStepLocation.setVisibility(step == 2 ? View.VISIBLE : View.GONE);
+            layoutStepDone.setVisibility(step == 3 ? View.VISIBLE : View.GONE);
+        }
+
+        if (tvStep1Circle != null && tvStep1Label != null && tvStep2Circle != null && tvStep2Label != null
+                && tvStep3Circle != null && tvStep3Label != null && tvSubmitText != null) {
+            boolean step1Active = step == 1;
+            boolean step2Active = step == 2;
+            boolean step3Active = step == 3;
+            boolean step2Done = step >= 2;
+            boolean step3Done = step == 3;
+
+            tvStep1Circle.setBackgroundResource(step1Active || step2Done || step3Done
+                    ? R.drawable.bg_step_active : R.drawable.bg_step_inactive);
+            tvStep1Circle.setTextColor(step1Active || step2Done || step3Done ? Color.WHITE : Color.parseColor("#A0AAB5"));
+            tvStep1Label.setTextColor(step1Active || step2Done || step3Done ? Color.parseColor("#1A7B42") : Color.parseColor("#A0AAB5"));
+
+            tvStep2Circle.setBackgroundResource(step2Active || step3Done ? R.drawable.bg_step_active : R.drawable.bg_step_inactive);
+            tvStep2Circle.setTextColor(step2Active || step3Done ? Color.WHITE : Color.parseColor("#A0AAB5"));
+            tvStep2Label.setTextColor(step2Active || step3Done ? Color.parseColor("#1A7B42") : Color.parseColor("#A0AAB5"));
+
+            tvStep3Circle.setBackgroundResource(step3Active ? R.drawable.bg_step_active : R.drawable.bg_step_inactive);
+            tvStep3Circle.setTextColor(step3Active ? Color.WHITE : Color.parseColor("#A0AAB5"));
+            tvStep3Label.setTextColor(step3Active ? Color.parseColor("#1A7B42") : Color.parseColor("#A0AAB5"));
+
+            if (step == 1) {
+                tvSubmitText.setText("Lanjutkan");
+            } else if (step == 2) {
+                tvSubmitText.setText("Selesai");
+            } else {
+                tvSubmitText.setText("Kirim Hibah");
+            }
+        }
+    }
+
+    /** Reset chip ke state tidak aktif (outline abu-abu). */
+    private void resetChip(TextView chip) {
+        if (chip == null)
+            return;
+        chip.setBackgroundResource(R.drawable.bg_chip_outline_grey);
+        chip.setTextColor(Color.parseColor("#6C757D"));
+    }
+
+    /** Set chip ke state aktif (solid hijau). */
+    private void activateChip(TextView chip) {
+        if (chip == null)
+            return;
+        chip.setBackgroundResource(R.drawable.bg_chip_green_solid);
+        chip.setTextColor(Color.WHITE);
+    }
+
     /**
-     * Meng-copy InputStream dari ContentResolver ke file sementara di cache
-     * directory.
-     * Ini lebih reliable daripada getRealPathFromURI yang tidak bisa digunakan di
-     * Android 10+.
-     *
-     * @param uri URI gambar yang dipilih dari galeri
-     * @return File sementara yang berisi data gambar, atau null jika gagal
+     * Copy URI dari galeri ke file temp (compatible Android 10+ Scoped Storage).
      */
     private File copyUriToTempFile(Uri uri) {
         try {
-            ContentResolver contentResolver = requireActivity().getContentResolver();
-            InputStream inputStream = contentResolver.openInputStream(uri);
+            ContentResolver cr = requireActivity().getContentResolver();
+            InputStream inputStream = cr.openInputStream(uri);
             if (inputStream == null)
                 return null;
 
-            // Buat file sementara di cache directory
-            File tempFile = new File(requireActivity().getCacheDir(), "upload_" + System.currentTimeMillis() + ".jpg");
+            File tempFile = new File(requireActivity().getCacheDir(),
+                    "upload_" + System.currentTimeMillis() + ".jpg");
             OutputStream outputStream = new FileOutputStream(tempFile);
 
             byte[] buffer = new byte[4096];
@@ -207,46 +379,47 @@ public class HibahFragment extends Fragment {
             while ((bytesRead = inputStream.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, bytesRead);
             }
-
             outputStream.flush();
             outputStream.close();
             inputStream.close();
-
             return tempFile;
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "copyUriToTempFile gagal: " + e.getMessage());
             return null;
         }
     }
 
     /**
-     * Mengirim gambar ke endpoint Spring Boot menggunakan OkHttp multipart.
-     * Setelah berhasil mendapat URL dari server, simpan data hibah ke Firebase
-     * Realtime Database.
-     * Dijalankan di background thread (enqueue) agar UI tidak freeze.
-     *
-     * @param imageUri URI gambar yang dipilih dari galeri
+     * Upload gambar ke server Spring Boot, lalu simpan data ke Firebase.
+     * Menggunakan OkHttpClient dengan timeout yang diperpanjang
+     * karena server Render bisa cold-start hingga 30 detik.
      */
     private void uploadKeServer(Uri imageUri, String namaBarang, String kategori,
-                                  String deskripsi, String deliveryOption, String lokasiWaktu) {
-        // Gunakan ContentResolver + temp file (compatible dengan Android 10+ Scoped
-        // Storage)
+            String deskripsi, String kondisiBarang,
+            String deliveryOption, String lokasiWaktu, String lokasiPengambilan, String kontak) {
+
         File imageFile = copyUriToTempFile(imageUri);
         if (imageFile == null || !imageFile.exists()) {
-            Toast.makeText(getContext(), "Tidak bisa membaca file gambar!", Toast.LENGTH_SHORT).show();
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(
+                        () -> Toast.makeText(getContext(), "Gagal membaca file gambar!", Toast.LENGTH_SHORT).show());
+            }
             return;
         }
 
-        OkHttpClient client = new OkHttpClient();
+        // Timeout diperpanjang untuk mengantisipasi cold-start Render (free tier)
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .build();
 
-        // Bangun multipart request body (hanya file, data lain disimpan langsung ke
-        // Firebase)
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart(
                         "file",
                         imageFile.getName(),
-                        RequestBody.create(imageFile, MediaType.parse("image/*")))
+                        RequestBody.create(imageFile, MediaType.parse("image/jpeg")))
                 .build();
 
         Request request = new Request.Builder()
@@ -254,38 +427,47 @@ public class HibahFragment extends Fragment {
                 .post(requestBody)
                 .build();
 
-        // Jalankan request di background thread
+        Log.d(TAG, "Mulai upload ke: " + UPLOAD_URL);
+
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                // Hapus file sementara
                 imageFile.delete();
+                Log.e(TAG, "Upload ke server GAGAL: " + e.getMessage());
 
                 if (getActivity() != null) {
-                    getActivity().runOnUiThread(() -> Toast.makeText(getContext(),
-                            "Gagal terhubung ke server. Cek koneksi & IP server.",
-                            Toast.LENGTH_LONG).show());
+                    getActivity().runOnUiThread(() -> {
+                        // Tanya user apakah ingin menyimpan tanpa gambar
+                        new AlertDialog.Builder(getContext())
+                                .setTitle("Server Tidak Terjangkau")
+                                .setMessage("Gambar tidak bisa diupload ke server (" + e.getMessage() + ").\n\n" +
+                                        "Simpan data barang tanpa gambar?")
+                                .setPositiveButton("Simpan Tanpa Gambar",
+                                        (d, w) -> simpanKeFirebase("", namaBarang, kategori, deskripsi,
+                                                kondisiBarang, deliveryOption, lokasiWaktu, lokasiPengambilan, kontak))
+                                .setNegativeButton("Batal", null)
+                                .show();
+                    });
                 }
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                // Hapus file sementara
                 imageFile.delete();
-
                 if (getActivity() == null)
                     return;
 
-                if (response.isSuccessful() && response.body() != null) {
-                    // Server mengembalikan URL gambar Google Drive
-                    String imageUrl = response.body().string().trim();
+                String body = response.body() != null ? response.body().string().trim() : "";
+                Log.d(TAG, "Response server — code: " + response.code() + ", body: " + body);
 
-                    // Simpan data hibah ke Firebase Realtime Database
-                    simpanKeFirebase(imageUrl, namaBarang, kategori, deskripsi, deliveryOption, lokasiWaktu);
+                if (response.isSuccessful()) {
+                    // Server mengembalikan URL gambar Google Drive
+                    simpanKeFirebase(body, namaBarang, kategori, deskripsi,
+                            kondisiBarang, deliveryOption, lokasiWaktu, lokasiPengambilan, kontak);
                 } else {
-                    String errorBody = response.body() != null ? response.body().string() : "Unknown error";
+                    final String errorMsg = body;
                     getActivity().runOnUiThread(() -> Toast.makeText(getContext(),
-                            "Upload gagal: " + errorBody,
+                            "Upload gagal (" + response.code() + "): " + errorMsg,
                             Toast.LENGTH_LONG).show());
                 }
             }
@@ -293,74 +475,75 @@ public class HibahFragment extends Fragment {
     }
 
     /**
-     * Menyimpan data hibah ke Firebase Realtime Database setelah upload gambar
-     * berhasil.
-     * Data disimpan di node "/hibah_items/{pushId}".
-     *
-     * @param imageUrl URL gambar publik dari Google Drive
+     * Mapping nama kategori ke id_itemCategory format Firebase.
+     */
+    private String mapKategoriToId(String kategori) {
+        switch (kategori) {
+            case "Elektronik":
+                return "cat_elektronik";
+            case "Perabotan":
+                return "cat_furniture";
+            case "Buku":
+                return "cat_buku";
+            case "Olahraga":
+                return "cat_olahraga";
+            case "Pakaian":
+                return "cat_pakaian";
+            default:
+                return "cat_lainnya";
+        }
+    }
+
+    /**
+     * Menyimpan data item ke Firebase Realtime Database di node /items/{randomId}.
+     * ID item dibuat random menggunakan UUID agar tidak bentrok.
      */
     private void simpanKeFirebase(String imageUrl, String namaBarang, String kategori,
-                                    String deskripsi, String deliveryOption, String lokasiWaktu) {
-        DatabaseReference hibahRef = FirebaseDatabase.getInstance().getReference("hibah_items");
-        DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("requests");
+            String deskripsi, String kondisiBarang,
+            String deliveryOption, String lokasiWaktu, String lokasiPengambilan, String kontak) {
 
-        // Ambil user ID dari Firebase Auth (jika sudah login)
+        DatabaseReference itemsRef = FirebaseDatabase.getInstance().getReference("items");
+
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         String userId = (currentUser != null) ? currentUser.getUid() : "anonymous";
 
-        // Siapkan data hibah
-        Map<String, Object> hibahData = new HashMap<>();
-        hibahData.put("namaBarang", namaBarang);
-        hibahData.put("kategori", kategori);
-        hibahData.put("deskripsi", deskripsi);
-        hibahData.put("deliveryOption", deliveryOption);
-        hibahData.put("lokasiWaktu", lokasiWaktu);
-        hibahData.put("imageUrl", imageUrl);
-        hibahData.put("userId", userId);
-        hibahData.put("timestamp", System.currentTimeMillis());
-        hibahData.put("status", "PENDING");
+        // Random item ID: "item_" + 8 karakter hex acak dari UUID
+        String randomSuffix = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
+        String itemId = "item_" + randomSuffix;
 
-        // Push data ke Firebase (auto-generate key)
-        String newHibahKey = hibahRef.push().getKey();
-        if (newHibahKey == null) {
-            if (getActivity() != null) {
-                getActivity().runOnUiThread(() -> Toast.makeText(getContext(),
-                        "Gagal membuat data hibah baru.",
-                        Toast.LENGTH_LONG).show());
-            }
-            return;
-        }
+        Map<String, Object> itemData = new HashMap<>();
+        itemData.put("itemName", namaBarang);
+        itemData.put("id_itemCategory", mapKategoriToId(kategori));
+        itemData.put("itemDescription", deskripsi);
+        itemData.put("itemCondition", kondisiBarang);
+        itemData.put("itemImage", imageUrl);
+        itemData.put("id_users", userId);
+        itemData.put("contact", kontak);
+        itemData.put("availability", true);
+        itemData.put("deliveryOption", deliveryOption);
+        itemData.put("lokasiWaktu", lokasiWaktu);
+        itemData.put("pickupLocation", lokasiPengambilan);
+        itemData.put("createdAt", System.currentTimeMillis());
 
-        Map<String, Object> updates = new HashMap<>();
-        updates.put("/hibah_items/" + newHibahKey, hibahData);
+        Log.d(TAG, "Menyimpan ke Firebase items/" + itemId);
 
-        Map<String, Object> requestData = new HashMap<>();
-        requestData.put("userId", userId);
-        requestData.put("hibahId", newHibahKey);
-        requestData.put("namaBarang", namaBarang);
-        requestData.put("kategori", kategori);
-        requestData.put("deskripsi", deskripsi);
-        requestData.put("deliveryOption", deliveryOption);
-        requestData.put("lokasiWaktu", lokasiWaktu);
-        requestData.put("imageUrl", imageUrl);
-        requestData.put("status", "PENDING");
-        requestData.put("createdAt", System.currentTimeMillis());
-
-        updates.put("/requests/" + newHibahKey, requestData);
-
-        FirebaseDatabase.getInstance().getReference().updateChildren(updates)
+        itemsRef.child(itemId).setValue(itemData)
                 .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "Firebase write SUKSES untuk itemId: " + itemId);
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(() -> {
                             Toast.makeText(getContext(),
-                                    "Barang berhasil dihibahkan dan masuk ke request admin!",
+                                    "Barang berhasil dihibahkan! 🎉",
                                     Toast.LENGTH_LONG).show();
+                            // Kembali ke Home
                             View homeNav = getActivity().findViewById(R.id.nav_home_layout);
-                            if (homeNav != null) homeNav.performClick();
+                            if (homeNav != null)
+                                homeNav.performClick();
                         });
                     }
                 })
                 .addOnFailureListener(e -> {
+                    Log.e(TAG, "Firebase write GAGAL: " + e.getMessage());
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(() -> Toast.makeText(getContext(),
                                 "Gagal menyimpan ke database: " + e.getMessage(),
