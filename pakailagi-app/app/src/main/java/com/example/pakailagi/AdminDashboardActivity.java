@@ -1,138 +1,140 @@
 package com.example.pakailagi;
 
-import android.content.Intent;
-import android.view.View;
 import android.os.Bundle;
-import android.widget.Toast;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
+import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.pakailagi.R;
-import com.example.pakailagi.adapter.AdminItemAdapter;
-import com.example.pakailagi.model.ItemModel;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.pakailagi.fragment.AdminHomeFragment;
+import com.example.pakailagi.fragment.AdminInventoryFragment;
+import com.example.pakailagi.fragment.AdminShopFragment;
+import com.example.pakailagi.fragment.AdminProfileFragment;
 
 public class AdminDashboardActivity extends AppCompatActivity {
 
-    private RecyclerView rvPendingItems;
-    private AdminItemAdapter adapter;
-    private List<ItemModel> pendingItemList;
-
-    // Ganti "items" dengan nama node tabel barang kamu di Firebase jika berbeda
-    private DatabaseReference databaseReference;
+    private LinearLayout navHome, navInventory, navShop, navProfile;
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
 
-        // 1. Inisialisasi Firebase & RecyclerView
-        databaseReference = FirebaseDatabase.getInstance().getReference("items");
-        rvPendingItems = findViewById(R.id.rvPendingItems);
-        rvPendingItems.setLayoutManager(new LinearLayoutManager(this));
+        // Initialize navbar items
+        navHome = findViewById(R.id.nav_home);
+        navInventory = findViewById(R.id.nav_inventory);
+        navShop = findViewById(R.id.nav_shop);
+        navProfile = findViewById(R.id.nav_profile);
 
-        pendingItemList = new ArrayList<>();
+        fragmentManager = getSupportFragmentManager();
 
-        // 2. Tarik Data dari Firebase
-        fetchPendingItems();
+        // Load Home Fragment by default
+        if (savedInstanceState == null) {
+            loadFragment(new AdminHomeFragment(), "home");
+            updateNavbarState(0);
+        }
 
-        setupInteractions();
+        setupNavbarListeners();
     }
 
-    private void fetchPendingItems() {
-        // Query: Hanya ambil data yang 'status'-nya 'pending'
-        databaseReference.orderByChild("status").equalTo("pending")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        pendingItemList.clear();
 
-                        for (DataSnapshot data : snapshot.getChildren()) {
-                            ItemModel item = data.getValue(ItemModel.class);
-                            if (item != null) {
-                                // Pastikan ID barang diambil dari Key Firebase agar bisa di-update nanti
-                                item.setId(data.getKey());
-                                pendingItemList.add(item);
-                            }
-                        }
-
-                        // 3. Masukkan data ke Adapter buatan tim Frontend
-                        adapter = new AdminItemAdapter(AdminDashboardActivity.this, pendingItemList, new AdminItemAdapter.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(ItemModel item) {
-                                // Jika Admin mengklik baris barang, munculkan dialog persetujuan
-                                showApprovalDialog(item);
-                            }
-                        });
-
-                        rvPendingItems.setAdapter(adapter);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(AdminDashboardActivity.this, "Gagal memuat data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+    private void loadFragment(Fragment fragment, String tag) {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragmentContainer, fragment, tag);
+        transaction.commit();
     }
 
-    private void showApprovalDialog(ItemModel item) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Tinjau Persetujuan");
-        builder.setMessage("Apa yang ingin Anda lakukan pada barang: " + item.getItemName() + " ?");
-
-        builder.setPositiveButton("Setuju", (dialog, which) -> {
-            updateItemStatus(item.getId(), "available");
+    private void setupNavbarListeners() {
+        navHome.setOnClickListener(v -> {
+            loadFragment(new AdminHomeFragment(), "home");
+            updateNavbarState(0);
         });
 
-        builder.setNegativeButton("Tolak", (dialog, which) -> {
-            updateItemStatus(item.getId(), "rejected");
+        navInventory.setOnClickListener(v -> {
+            loadFragment(new AdminInventoryFragment(), "inventory");
+            updateNavbarState(1);
         });
 
-        builder.setNeutralButton("Batal", (dialog, which) -> dialog.dismiss());
+        navShop.setOnClickListener(v -> {
+            loadFragment(new AdminShopFragment(), "shop");
+            updateNavbarState(2);
+        });
 
-        builder.show();
+        navProfile.setOnClickListener(v -> {
+            loadFragment(new AdminProfileFragment(), "profile");
+            updateNavbarState(3);
+        });
     }
 
-    private void updateItemStatus(String itemId, String newStatus) {
-        // Update field 'status' di Firebase
-        databaseReference.child(itemId).child("status").setValue(newStatus)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(AdminDashboardActivity.this, "Barang berhasil di-" + newStatus, Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(AdminDashboardActivity.this, "Gagal update status!", Toast.LENGTH_SHORT).show();
-                });
+    private void updateNavbarState(int activeIndex) {
+        // Reset all navbar items to inactive state
+        resetNavbarItems();
+        
+        // Update the active item
+        switch (activeIndex) {
+            case 0:
+                setNavbarItemActive(navHome);
+                break;
+            case 1:
+                setNavbarItemActive(navInventory);
+                break;
+            case 2:
+                setNavbarItemActive(navShop);
+                break;
+            case 3:
+                setNavbarItemActive(navProfile);
+                break;
+        }
     }
 
-    private void setupInteractions() {
-        // 1. Jika tombol diklik, arahkan ke Activity Admin yang sesuai
+    private void resetNavbarItems() {
+        setNavbarItemInactive(navHome);
+        setNavbarItemInactive(navInventory);
+        setNavbarItemInactive(navShop);
+        setNavbarItemInactive(navProfile);
+    }
 
-        // Ganti InventoryActivity.class -> AdminInventoryActivity.class
-        findViewById(R.id.nav_inventory).setOnClickListener(v -> {
-            startActivity(new Intent(AdminDashboardActivity.this, AdminInventoryActivity.class));
-        });
+    private void setNavbarItemActive(LinearLayout navItem) {
+        // Find the inner LinearLayout (the one with background)
+        LinearLayout innerLayout = (LinearLayout) navItem.getChildAt(0);
+        if (innerLayout != null) {
+            innerLayout.setBackgroundResource(R.drawable.bg_admin_nav_active);
+            // Update text and icon colors to white
+            for (int i = 0; i < innerLayout.getChildCount(); i++) {
+                if (innerLayout.getChildAt(i) instanceof android.widget.ImageView) {
+                    android.widget.ImageView iv = (android.widget.ImageView) innerLayout.getChildAt(i);
+                    iv.setColorFilter(getResources().getColor(android.R.color.white));
+                } else if (innerLayout.getChildAt(i) instanceof android.widget.TextView) {
+                    android.widget.TextView tv = (android.widget.TextView) innerLayout.getChildAt(i);
+                    tv.setTextColor(getResources().getColor(android.R.color.white));
+                }
+            }
+        } else {
+            // Direct styling if structure is different
+            navItem.setBackgroundResource(R.drawable.bg_admin_nav_active);
+        }
+    }
 
-        // Ganti ShopActivity.class -> AdminShopActivity.class
-        findViewById(R.id.nav_shop).setOnClickListener(v -> {
-            startActivity(new Intent(AdminDashboardActivity.this, AdminShopActivity.class));
-        });
-
-        // Ganti ProfileActivity.class -> AdminProfileActivity.class
-        findViewById(R.id.nav_profile).setOnClickListener(v -> {
-            startActivity(new Intent(AdminDashboardActivity.this, AdminProfileActivity.class));
-        });
-
-        // Untuk Home, jika memang belum ada AdminHomeActivity,
-        // sesuaikan dengan nama class yang Anda miliki.
+    private void setNavbarItemInactive(LinearLayout navItem) {
+        // Find the inner LinearLayout
+        LinearLayout innerLayout = (LinearLayout) navItem.getChildAt(0);
+        if (innerLayout != null) {
+            innerLayout.setBackground(null);
+            // Update text and icon colors to gray
+            for (int i = 0; i < innerLayout.getChildCount(); i++) {
+                if (innerLayout.getChildAt(i) instanceof android.widget.ImageView) {
+                    android.widget.ImageView iv = (android.widget.ImageView) innerLayout.getChildAt(i);
+                    iv.setColorFilter(getResources().getColor(R.color.admin_nav_inactive));
+                } else if (innerLayout.getChildAt(i) instanceof android.widget.TextView) {
+                    android.widget.TextView tv = (android.widget.TextView) innerLayout.getChildAt(i);
+                    tv.setTextColor(getResources().getColor(R.color.admin_nav_inactive));
+                }
+            }
+        } else {
+            navItem.setBackground(null);
+        }
     }
 }

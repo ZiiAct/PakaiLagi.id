@@ -15,4 +15,5 @@
     <color name="location_bg">#E8F5E9</color>
     <color name="detail_blue">#0D6EFD</color>
     <color name="cari_header">#1A4D30</color>
+    <color name="admin_nav_inactive">#ADB5BD</color>
 </resources>

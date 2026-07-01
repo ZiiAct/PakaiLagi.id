@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.example.pakailagi.data.SessionManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -78,12 +79,18 @@ public class ProfilFragment extends Fragment {
             // LOGOUT
             layoutDukungan.getChildAt(2).setOnClickListener(v -> {
                 try {
+                    // Clear session data
+                    SessionManager.getInstance(getContext()).clearSession();
+                    
+                    // Sign out from Firebase
                     FirebaseAuth.getInstance().signOut();
                     Toast.makeText(getContext(), "Logout Berhasil!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-                    if (getActivity() != null) getActivity().finish();
+                    // Close current activity properly
+                    if (getActivity() != null) {
+                        getActivity().finishAffinity();
+                    }
                 } catch (Exception ex) {
                     Toast.makeText(getContext(), "SYSTEM INFO: Gagal ke halaman Login (Cek AndroidManifest.xml). Kembali ke Beranda.", Toast.LENGTH_LONG).show();
                     simulateNav(R.id.nav_home_layout);
