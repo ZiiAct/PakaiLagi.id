@@ -80,10 +80,11 @@ public class GoogleDriveService {
                 file.getContentType(),
                 file.getInputStream());
 
-        // Eksekusi upload ke Drive
+        // Eksekusi upload ke Drive (menambahkan supportsAllDrives untuk Shared Drive)
         File uploadedFile = driveService.files()
                 .create(fileMetadata, mediaContent)
                 .setFields("id, webViewLink")
+                .setSupportsAllDrives(true)
                 .execute();
 
         // Set permission agar file bisa diakses publik via link
@@ -93,6 +94,7 @@ public class GoogleDriveService {
                     .setRole("writer");
             driveService.permissions()
                     .create(uploadedFile.getId(), permission)
+                    .setSupportsAllDrives(true)
                     .execute();
         } catch (Exception e) {
             System.err.println("Gagal mengatur permission publik (mungkin policy workspace atau folder sudah publik): "
