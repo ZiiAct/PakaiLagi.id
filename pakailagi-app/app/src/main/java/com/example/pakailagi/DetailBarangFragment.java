@@ -101,16 +101,29 @@ public class DetailBarangFragment extends Fragment {
         if (tvConditionBadge != null)
             tvConditionBadge.setText(condition);
 
+        TextView tvDetailDescription = view.findViewById(R.id.tvDetailDescription);
+        TextView tvDetailCategory = view.findViewById(R.id.tvDetailCategory);
+
         // Fetch extra details from Firebase if itemId is available
         if (!itemId.isEmpty()) {
-            FirebaseDatabase.getInstance().getReference("hibahReq").child(itemId)
+            FirebaseDatabase.getInstance().getReference("items").child(itemId)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (!isAdded() || snapshot == null)
+                            if (!isAdded() || !snapshot.exists())
                                 return;
-                            String desc = snapshot.child("description").getValue(String.class);
-                            // Description TextView is static in XML — could be updated here if needed
+                            String desc = snapshot.child("itemDescription").getValue(String.class);
+                            String category = snapshot.child("id_itemCategory").getValue(String.class);
+
+                            if (tvDetailDescription != null && desc != null && !desc.isEmpty()) {
+                                tvDetailDescription.setText(desc);
+                            }
+                            if (tvDetailCategory != null && category != null && !category.isEmpty()) {
+                                // Map category ID to readable name if needed (e.g., cat_elektronik -> Elektronik)
+                                String readableCategory = category.replace("cat_", "");
+                                readableCategory = readableCategory.substring(0, 1).toUpperCase() + readableCategory.substring(1);
+                                tvDetailCategory.setText(readableCategory);
+                            }
                         }
 
                         @Override

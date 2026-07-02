@@ -29,8 +29,11 @@ public class GoogleDriveService {
     private Drive getDriveService() throws IOException, GeneralSecurityException {
         InputStream in = null;
         String envCredentials = System.getenv("GOOGLE_DRIVE_CREDENTIALS");
+        java.io.File renderSecretFile = new java.io.File("/etc/secrets/google-drive-credentials.json");
 
-        if (envCredentials != null && !envCredentials.trim().isEmpty()) {
+        if (renderSecretFile.exists()) {
+            in = new java.io.FileInputStream(renderSecretFile);
+        } else if (envCredentials != null && !envCredentials.trim().isEmpty()) {
             envCredentials = envCredentials.replace("\\n", "\n");
             in = new java.io.ByteArrayInputStream(envCredentials.getBytes(java.nio.charset.StandardCharsets.UTF_8));
         } else {

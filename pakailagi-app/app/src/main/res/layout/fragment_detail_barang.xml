@@ -148,11 +148,12 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tvDetailDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:lineSpacingExtra="4dp"
-                android:text="Meja belajar kayu minimalis, masih sangat kokoh dan nyaman digunakan. Cocok untuk belajar atau kerja dari rumah. Terdapat sedikit goresan di bagian ujung, namun tidak mengurangi fungsi."
+                android:text="Memuat deskripsi..."
                 android:textColor="#495057"
                 android:textSize="14sp" />
 
@@ -172,6 +173,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/tvDetailCategory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_chip_outline"
@@ -179,20 +181,7 @@
                     android:paddingEnd="16dp"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
-                    android:text="Perabot"
-                    android:textColor="#495057"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_chip_outline"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="Peralatan Rumah"
+                    android:text="Memuat kategori..."
                     android:textColor="#495057"
                     android:textSize="12sp" />
             </LinearLayout>
