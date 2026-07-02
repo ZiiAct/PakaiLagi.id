@@ -199,7 +199,8 @@ public class HibahFragment extends Fragment {
                         : "Lainnya";
                 String deskripsi = etDeskripsiBarang != null ? etDeskripsiBarang.getText().toString().trim() : "";
                 String kontak = etKontakHibah != null ? etKontakHibah.getText().toString().trim() : "";
-                String lokasiPengambilan = etLokasiPengambilan != null ? etLokasiPengambilan.getText().toString().trim() : "";
+                String lokasiPengambilan = etLokasiPengambilan != null ? etLokasiPengambilan.getText().toString().trim()
+                        : "";
                 String lokasiWaktu = etLokasiWaktu != null ? etLokasiWaktu.getText().toString().trim() : "";
 
                 // Baca kondisi barang dari chip yang aktif (textColor putih = aktif)
@@ -225,7 +226,8 @@ public class HibahFragment extends Fragment {
                         return;
                     }
                     if (TextUtils.isEmpty(deskripsi)) {
-                        Toast.makeText(getContext(), "Isi deskripsi barang terlebih dahulu.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Isi deskripsi barang terlebih dahulu.", Toast.LENGTH_SHORT)
+                                .show();
                         return;
                     }
                     if (TextUtils.isEmpty(kontak)) {
@@ -244,17 +246,20 @@ public class HibahFragment extends Fragment {
 
                 if (currentStep == 2) {
                     if (TextUtils.isEmpty(lokasiPengambilan)) {
-                        Toast.makeText(getContext(), "Isi lokasi pengambilan terlebih dahulu.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Isi lokasi pengambilan terlebih dahulu.", Toast.LENGTH_SHORT)
+                                .show();
                         return;
                     }
                     if (TextUtils.isEmpty(lokasiWaktu)) {
-                        Toast.makeText(getContext(), "Isi detail lokasi/waktu terlebih dahulu.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Isi detail lokasi/waktu terlebih dahulu.", Toast.LENGTH_SHORT)
+                                .show();
                         return;
                     }
 
                     currentStep = 3;
                     showStep(currentStep);
-                    Toast.makeText(getContext(), "Semua langkah sudah terisi, tekan sekali lagi untuk submit.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Semua langkah sudah terisi, tekan sekali lagi untuk submit.",
+                            Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -266,7 +271,8 @@ public class HibahFragment extends Fragment {
                         return;
                     }
                     if (TextUtils.isEmpty(deskripsi)) {
-                        Toast.makeText(getContext(), "Isi deskripsi barang terlebih dahulu.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Isi deskripsi barang terlebih dahulu.", Toast.LENGTH_SHORT)
+                                .show();
                         currentStep = 1;
                         showStep(currentStep);
                         return;
@@ -284,13 +290,15 @@ public class HibahFragment extends Fragment {
                         return;
                     }
                     if (TextUtils.isEmpty(lokasiPengambilan)) {
-                        Toast.makeText(getContext(), "Isi lokasi pengambilan terlebih dahulu.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Isi lokasi pengambilan terlebih dahulu.", Toast.LENGTH_SHORT)
+                                .show();
                         currentStep = 2;
                         showStep(currentStep);
                         return;
                     }
                     if (TextUtils.isEmpty(lokasiWaktu)) {
-                        Toast.makeText(getContext(), "Isi detail lokasi/waktu terlebih dahulu.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Isi detail lokasi/waktu terlebih dahulu.", Toast.LENGTH_SHORT)
+                                .show();
                         currentStep = 2;
                         showStep(currentStep);
                         return;
@@ -322,13 +330,18 @@ public class HibahFragment extends Fragment {
             boolean step3Done = step == 3;
 
             tvStep1Circle.setBackgroundResource(step1Active || step2Done || step3Done
-                    ? R.drawable.bg_step_active : R.drawable.bg_step_inactive);
-            tvStep1Circle.setTextColor(step1Active || step2Done || step3Done ? Color.WHITE : Color.parseColor("#A0AAB5"));
-            tvStep1Label.setTextColor(step1Active || step2Done || step3Done ? Color.parseColor("#1A7B42") : Color.parseColor("#A0AAB5"));
+                    ? R.drawable.bg_step_active
+                    : R.drawable.bg_step_inactive);
+            tvStep1Circle
+                    .setTextColor(step1Active || step2Done || step3Done ? Color.WHITE : Color.parseColor("#A0AAB5"));
+            tvStep1Label.setTextColor(
+                    step1Active || step2Done || step3Done ? Color.parseColor("#1A7B42") : Color.parseColor("#A0AAB5"));
 
-            tvStep2Circle.setBackgroundResource(step2Active || step3Done ? R.drawable.bg_step_active : R.drawable.bg_step_inactive);
+            tvStep2Circle.setBackgroundResource(
+                    step2Active || step3Done ? R.drawable.bg_step_active : R.drawable.bg_step_inactive);
             tvStep2Circle.setTextColor(step2Active || step3Done ? Color.WHITE : Color.parseColor("#A0AAB5"));
-            tvStep2Label.setTextColor(step2Active || step3Done ? Color.parseColor("#1A7B42") : Color.parseColor("#A0AAB5"));
+            tvStep2Label
+                    .setTextColor(step2Active || step3Done ? Color.parseColor("#1A7B42") : Color.parseColor("#A0AAB5"));
 
             tvStep3Circle.setBackgroundResource(step3Active ? R.drawable.bg_step_active : R.drawable.bg_step_inactive);
             tvStep3Circle.setTextColor(step3Active ? Color.WHITE : Color.parseColor("#A0AAB5"));

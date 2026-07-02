@@ -124,14 +124,14 @@ public class LoginActivity extends AppCompatActivity {
 
         String uid = currentUser.getUid();
         SessionManager sessionManager = SessionManager.getInstance(this);
-        
+
         mDatabase.child("users").child(uid).child("role")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         String role = snapshot.getValue(String.class);
                         Intent intent;
-                        
+
                         if (role != null && role.equalsIgnoreCase("admin")) {
                             // Save admin role to SessionManager
                             sessionManager.setUserRole("admin");
@@ -141,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
                             sessionManager.setUserRole("user");
                             intent = new Intent(LoginActivity.this, MainActivity.class);
                         }
-                        
+
                         // Also save user info
                         sessionManager.setUserId(uid);
                         if (currentUser.getEmail() != null) {
@@ -150,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (currentUser.getDisplayName() != null) {
                             sessionManager.setUserName(currentUser.getDisplayName());
                         }
-                        
+
                         startActivity(intent);
                         finish();
                     }
@@ -161,13 +161,13 @@ public class LoginActivity extends AppCompatActivity {
                         SessionManager sessionManager = SessionManager.getInstance(LoginActivity.this);
                         String cachedRole = sessionManager.getUserRole();
                         Intent intent;
-                        
+
                         if (cachedRole.equalsIgnoreCase("admin")) {
                             intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
                         } else {
                             intent = new Intent(LoginActivity.this, MainActivity.class);
                         }
-                        
+
                         startActivity(intent);
                         finish();
                     }

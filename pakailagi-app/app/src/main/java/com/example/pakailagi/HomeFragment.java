@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.pakailagi.model.ItemModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -19,14 +20,23 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("all")
 public class HomeFragment extends Fragment {
 
-    public HomeFragment() {}
+    // Listener reference kept so we can remove it in onDestroyView to prevent leaks
+    private ValueEventListener itemsListener;
+    private DatabaseReference itemsRef;
+
+    public HomeFragment() {
+    }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -38,13 +48,17 @@ public class HomeFragment extends Fragment {
         loadUserGreeting(view);
 
         View btnDonateNow = view.findViewById(R.id.btnDonateNow);
-        if (btnDonateNow != null) btnDonateNow.setOnClickListener(v -> simulateBottomNavClick(R.id.nav_grant_layout));
+        if (btnDonateNow != null)
+            btnDonateNow.setOnClickListener(v -> simulateBottomNavClick(R.id.nav_grant_layout));
 
         View categorySearch = view.findViewById(R.id.categorySearch);
-        if (categorySearch != null) categorySearch.setOnClickListener(v -> simulateBottomNavClick(R.id.nav_search_layout));
+        if (categorySearch != null)
+            categorySearch.setOnClickListener(v -> simulateBottomNavClick(R.id.nav_search_layout));
 
         View cardNotification = view.findViewById(R.id.cardNotification);
-        if (cardNotification != null) cardNotification.setOnClickListener(v -> Toast.makeText(getContext(), "Belum ada notifikasi baru", Toast.LENGTH_SHORT).show());
+        if (cardNotification != null)
+            cardNotification.setOnClickListener(
+                    v -> Toast.makeText(getContext(), "Belum ada notifikasi baru", Toast.LENGTH_SHORT).show());
 
         LinearLayout homeContent = view.findViewById(R.id.homeContent);
         if (homeContent != null) {
@@ -54,46 +68,134 @@ public class HomeFragment extends Fragment {
                 menuRow.getChildAt(1).setOnClickListener(v -> simulateBottomNavClick(R.id.nav_grant_layout)); // Hibah
                 menuRow.getChildAt(2).setOnClickListener(v -> simulateBottomNavClick(R.id.nav_wishlist_layout)); // Wishlist
 
-                // SESUAI REQUEST: TOMBOL RIWAYAT (TENGAH) BUKA FRAGMENT RIWAYAT
+                // TOMBOL RIWAYAT (TENGAH) BUKA FRAGMENT RIWAYAT
                 menuRow.getChildAt(3).setOnClickListener(v -> {
                     if (getActivity() instanceof MainActivity) {
                         ((MainActivity) getActivity()).switchFragment(new RiwayatPengajuanFragment());
-                        ((MainActivity) getActivity()).updateNavUI(-1); // Matiin highlight hijau di Bottom Nav
+                        ((MainActivity) getActivity()).updateNavUI(-1);
                     }
                 });
 
                 // B. Tulisan "Lihat Semua"
                 LinearLayout headerBarang = (LinearLayout) homeContent.getChildAt(3);
                 View txtLihatSemua = headerBarang.getChildAt(1);
-                txtLihatSemua.setOnClickListener(v -> Toast.makeText(getContext(), "Menampilkan semua barang...", Toast.LENGTH_SHORT).show());
+                txtLihatSemua.setOnClickListener(v -> simulateBottomNavClick(R.id.nav_search_layout));
 
-                // C. Kartu Barang Terbaru
-                android.widget.HorizontalScrollView hsv = (android.widget.HorizontalScrollView) homeContent.getChildAt(4);
+                // C. Kartu Barang Terbaru — dinamis dari Firebase
+                android.widget.HorizontalScrollView hsv = (android.widget.HorizontalScrollView) homeContent
+                        .getChildAt(4);
                 LinearLayout cardContainer = (LinearLayout) hsv.getChildAt(0);
 
-                View cardKursi = cardContainer.getChildAt(0);
-                cardKursi.setOnClickListener(v -> openDetail("Kursi Kantor Ergonomis", "Bekasi • 5 km dari Anda"));
+                // Load items from Firebase
+                loadApprovedItems(cardContainer);
 
-                View cardKotak = cardContainer.getChildAt(1);
-                cardKotak.setOnClickListener(v -> openDetail("Kotak Penyimpanan Plastik", "Jakarta Selatan • 2 km dari Anda"));
-
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
+    }
+
+    /**
+     * Fetches hibahReq items where status == "approved" and dynamically
+     * inflates card views into the horizontal scroll container.
+     */
+    private void loadApprovedItems(LinearLayout cardContainer) {
+        if (cardContainer == null || getContext() == null)
+            return;
+
+        itemsRef = FirebaseDatabase.getInstance().getReference("hibahReq");
+        itemsListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (getContext() == null || !isAdded())
+                    return;
+
+                // Collect approved items
+                List<ItemModel> approvedItems = new ArrayList<>();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    String status = ds.child("status").getValue(String.class);
+                    if ("approved".equals(status)) {
+                        ItemModel item = ds.getValue(ItemModel.class);
+                        if (item != null) {
+                            item.setId(ds.getKey());
+                            approvedItems.add(item);
+                        }
+                    }
+                }
+
+                // Clear existing (static dummy) cards
+                cardContainer.removeAllViews();
+
+                if (approvedItems.isEmpty()) {
+                    // Show empty state text
+                    TextView emptyTv = new TextView(getContext());
+                    emptyTv.setText("Belum ada barang tersedia saat ini.");
+                    emptyTv.setTextColor(0xFF6C757D);
+                    emptyTv.setTextSize(12f);
+                    emptyTv.setPadding(8, 8, 8, 8);
+                    cardContainer.addView(emptyTv);
+                    return;
+                }
+
+                // Inflate a card for each approved item
+                LayoutInflater inflater = LayoutInflater.from(getContext());
+                for (ItemModel item : approvedItems) {
+                    View card = inflater.inflate(R.layout.item_home_card, cardContainer, false);
+
+                    TextView tvName = card.findViewById(R.id.tvHomeCardName);
+                    TextView tvLocation = card.findViewById(R.id.tvHomeCardLocation);
+                    TextView tvStatus = card.findViewById(R.id.tvHomeCardStatus);
+
+                    if (tvName != null)
+                        tvName.setText(item.getItemName());
+                    if (tvLocation != null)
+                        tvLocation.setText(item.getLocation() != null ? item.getLocation() : "Lokasi tidak tersedia");
+                    if (tvStatus != null)
+                        tvStatus.setText("Tersedia");
+
+                    card.setOnClickListener(v -> {
+                        if (getActivity() instanceof MainActivity) {
+                            ((MainActivity) getActivity()).showDetailBarang(item);
+                        }
+                    });
+
+                    // Add margin between cards
+                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) card.getLayoutParams();
+                    if (params == null)
+                        params = new LinearLayout.LayoutParams(
+                                (int) (160 * getResources().getDisplayMetrics().density),
+                                LinearLayout.LayoutParams.WRAP_CONTENT);
+                    params.setMarginEnd((int) (16 * getResources().getDisplayMetrics().density));
+                    card.setLayoutParams(params);
+
+                    cardContainer.addView(card);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (getContext() != null) {
+                    Toast.makeText(getContext(), "Gagal memuat barang: " + error.getMessage(), Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+        };
+
+        itemsRef.addValueEventListener(itemsListener);
     }
 
     private void loadUserGreeting(View view) {
         TextView tvGreetingName = view.findViewById(R.id.tvGreetingName);
-        if (tvGreetingName == null) return;
+        if (tvGreetingName == null)
+            return;
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser == null) return;
+        if (currentUser == null)
+            return;
 
-        // Set nama sementara dari Firebase Auth (jika ada displayName)
         String authName = currentUser.getDisplayName();
         if (authName != null && !authName.isEmpty()) {
             tvGreetingName.setText(authName);
         } else if (currentUser.getEmail() != null) {
-            // Fallback: ambil bagian sebelum @ dari email
             String email = currentUser.getEmail();
             String nameFromEmail = email.contains("@") ? email.substring(0, email.indexOf('@')) : email;
             tvGreetingName.setText(nameFromEmail);
@@ -113,7 +215,6 @@ public class HomeFragment extends Fragment {
                         tvGreetingName.setText(fullName);
                         return;
                     }
-                    // Fallback ke username jika fullName kosong
                     String username = snapshot.child("username").getValue(String.class);
                     if (username != null && !username.isEmpty()) {
                         tvGreetingName.setText(username);
@@ -123,21 +224,25 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Biarkan nama yang sudah di-set dari fallback di atas
+                // Fallback sudah di-set di atas
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // Detach Firebase listener to prevent memory leaks
+        if (itemsRef != null && itemsListener != null) {
+            itemsRef.removeEventListener(itemsListener);
+        }
     }
 
     private void simulateBottomNavClick(int navId) {
         if (getActivity() != null) {
             View navButton = getActivity().findViewById(navId);
-            if (navButton != null) navButton.performClick();
-        }
-    }
-
-    private void openDetail(String name, String location) {
-        if (getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).showDetailBarang(name, location);
+            if (navButton != null)
+                navButton.performClick();
         }
     }
 }

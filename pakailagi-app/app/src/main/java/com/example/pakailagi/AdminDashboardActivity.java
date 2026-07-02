@@ -40,7 +40,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
         setupNavbarListeners();
     }
 
-
     private void loadFragment(Fragment fragment, String tag) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragmentContainer, fragment, tag);
@@ -72,7 +71,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private void updateNavbarState(int activeIndex) {
         // Reset all navbar items to inactive state
         resetNavbarItems();
-        
+
         // Update the active item
         switch (activeIndex) {
             case 0:

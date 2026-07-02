@@ -10,6 +10,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import com.example.pakailagi.model.ItemModel;
 import com.example.pakailagi.model.WishlistItem;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,11 +49,31 @@ public class MainActivity extends AppCompatActivity {
             tvWishlist = findViewById(R.id.tv_nav_wishlist);
             tvAccount = findViewById(R.id.tv_nav_account);
 
-            if (navHome != null) navHome.setOnClickListener(v -> { switchFragment(new HomeFragment()); updateNavUI(0); });
-            if (navSearch != null) navSearch.setOnClickListener(v -> { switchFragment(new CariBarangFragment()); updateNavUI(1); });
-            if (navGrant != null) navGrant.setOnClickListener(v -> { switchFragment(new HibahFragment()); updateNavUI(2); });
-            if (navWishlist != null) navWishlist.setOnClickListener(v -> { switchFragment(new WishlistFragment()); updateNavUI(3); });
-            if (navAccount != null) navAccount.setOnClickListener(v -> { switchFragment(new ProfilFragment()); updateNavUI(4); });
+            if (navHome != null)
+                navHome.setOnClickListener(v -> {
+                    switchFragment(new HomeFragment());
+                    updateNavUI(0);
+                });
+            if (navSearch != null)
+                navSearch.setOnClickListener(v -> {
+                    switchFragment(new CariBarangFragment());
+                    updateNavUI(1);
+                });
+            if (navGrant != null)
+                navGrant.setOnClickListener(v -> {
+                    switchFragment(new HibahFragment());
+                    updateNavUI(2);
+                });
+            if (navWishlist != null)
+                navWishlist.setOnClickListener(v -> {
+                    switchFragment(new WishlistFragment());
+                    updateNavUI(3);
+                });
+            if (navAccount != null)
+                navAccount.setOnClickListener(v -> {
+                    switchFragment(new ProfilFragment());
+                    updateNavUI(4);
+                });
 
             if (savedInstanceState == null) {
                 switchFragment(new HomeFragment());
@@ -82,12 +103,31 @@ public class MainActivity extends AppCompatActivity {
     public void showDetailBarang(String name, String location, String condition) {
         try {
             View bottomNav = findViewById(R.id.custom_bottom_nav);
-            if (bottomNav != null) bottomNav.setVisibility(View.GONE);
+            if (bottomNav != null)
+                bottomNav.setVisibility(View.GONE);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, DetailBarangFragment.newInstance(name, location, condition))
                     .addToBackStack(null)
                     .commit();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
+    }
+
+    /**
+     * New overload: passes full ItemModel data (including itemId) to
+     * DetailBarangFragment.
+     */
+    public void showDetailBarang(ItemModel item) {
+        try {
+            View bottomNav = findViewById(R.id.custom_bottom_nav);
+            if (bottomNav != null)
+                bottomNav.setVisibility(View.GONE);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, DetailBarangFragment.newInstance(item))
+                    .addToBackStack(null)
+                    .commit();
+        } catch (Exception e) {
+        }
     }
 
     public boolean addItemToWishlist(String name, String location, String condition) {
@@ -122,9 +162,11 @@ public class MainActivity extends AppCompatActivity {
     public void hideDetailBarang() {
         try {
             View bottomNav = findViewById(R.id.custom_bottom_nav);
-            if (bottomNav != null) bottomNav.setVisibility(View.VISIBLE);
+            if (bottomNav != null)
+                bottomNav.setVisibility(View.VISIBLE);
             getSupportFragmentManager().popBackStack();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     public void updateNavUI(int activeIndex) {
@@ -132,22 +174,36 @@ public class MainActivity extends AppCompatActivity {
             int colorGray = Color.parseColor("#6C757D");
             int colorActiveText = Color.parseColor("#1A7B42");
 
-            if (navHome != null) navHome.setBackground(null);
-            if (navSearch != null) navSearch.setBackground(null);
-            if (navGrant != null) navGrant.setBackground(null);
-            if (navWishlist != null) navWishlist.setBackground(null);
-            if (navAccount != null) navAccount.setBackground(null);
+            if (navHome != null)
+                navHome.setBackground(null);
+            if (navSearch != null)
+                navSearch.setBackground(null);
+            if (navGrant != null)
+                navGrant.setBackground(null);
+            if (navWishlist != null)
+                navWishlist.setBackground(null);
+            if (navAccount != null)
+                navAccount.setBackground(null);
 
-            if (ivHome != null) ivHome.setColorFilter(colorGray);
-            if (ivSearch != null) ivSearch.setColorFilter(colorGray);
-            if (ivGrant != null) ivGrant.setColorFilter(colorGray);
-            if (ivWishlist != null) ivWishlist.setColorFilter(colorGray);
-            if (ivAccount != null) ivAccount.setColorFilter(colorGray);
+            if (ivHome != null)
+                ivHome.setColorFilter(colorGray);
+            if (ivSearch != null)
+                ivSearch.setColorFilter(colorGray);
+            if (ivGrant != null)
+                ivGrant.setColorFilter(colorGray);
+            if (ivWishlist != null)
+                ivWishlist.setColorFilter(colorGray);
+            if (ivAccount != null)
+                ivAccount.setColorFilter(colorGray);
 
-            if (tvHome != null) tvHome.setTextColor(colorGray);
-            if (tvSearch != null) tvSearch.setTextColor(colorGray);
-            if (tvGrant != null) tvGrant.setTextColor(colorGray);
-            if (tvAccount != null) tvAccount.setTextColor(colorGray);
+            if (tvHome != null)
+                tvHome.setTextColor(colorGray);
+            if (tvSearch != null)
+                tvSearch.setTextColor(colorGray);
+            if (tvGrant != null)
+                tvGrant.setTextColor(colorGray);
+            if (tvAccount != null)
+                tvAccount.setTextColor(colorGray);
 
             if (tvWishlist != null) {
                 tvWishlist.setText("Wishlist");
@@ -159,11 +215,31 @@ public class MainActivity extends AppCompatActivity {
             TextView activeText = null;
 
             switch (activeIndex) {
-                case 0: activeLayout = navHome; activeIcon = ivHome; activeText = tvHome; break;
-                case 1: activeLayout = navSearch; activeIcon = ivSearch; activeText = tvSearch; break;
-                case 2: activeLayout = navGrant; activeIcon = ivGrant; activeText = tvGrant; break;
-                case 3: activeLayout = navWishlist; activeIcon = ivWishlist; activeText = tvWishlist; break;
-                case 4: activeLayout = navAccount; activeIcon = ivAccount; activeText = tvAccount; break;
+                case 0:
+                    activeLayout = navHome;
+                    activeIcon = ivHome;
+                    activeText = tvHome;
+                    break;
+                case 1:
+                    activeLayout = navSearch;
+                    activeIcon = ivSearch;
+                    activeText = tvSearch;
+                    break;
+                case 2:
+                    activeLayout = navGrant;
+                    activeIcon = ivGrant;
+                    activeText = tvGrant;
+                    break;
+                case 3:
+                    activeLayout = navWishlist;
+                    activeIcon = ivWishlist;
+                    activeText = tvWishlist;
+                    break;
+                case 4:
+                    activeLayout = navAccount;
+                    activeIcon = ivAccount;
+                    activeText = tvAccount;
+                    break;
             }
 
             if (activeLayout != null && activeIcon != null && activeText != null) {
