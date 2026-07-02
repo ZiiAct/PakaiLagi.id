@@ -102,7 +102,7 @@ public class HomeFragment extends Fragment {
         if (cardContainer == null || getContext() == null)
             return;
 
-        itemsRef = FirebaseDatabase.getInstance().getReference("hibahReq");
+        itemsRef = FirebaseDatabase.getInstance().getReference("items");
         itemsListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

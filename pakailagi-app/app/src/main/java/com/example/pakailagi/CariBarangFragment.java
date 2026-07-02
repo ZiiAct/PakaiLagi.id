@@ -108,7 +108,7 @@ public class CariBarangFragment extends Fragment {
      * populates masterList, then syncs displayList.
      */
     private void loadApprovedItems() {
-        itemsRef = FirebaseDatabase.getInstance().getReference("hibahReq");
+        itemsRef = FirebaseDatabase.getInstance().getReference("items");
         itemsListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -121,9 +121,9 @@ public class CariBarangFragment extends Fragment {
                     if ("approved".equals(status)) {
                         String id = ds.getKey();
                         String name = ds.child("itemName").getValue(String.class);
-                        String location = ds.child("location").getValue(String.class);
-                        String cond = ds.child("condition").getValue(String.class);
-                        String imgUrl = ds.child("imageUrl").getValue(String.class);
+                        String location = ds.child("pickupLocation").getValue(String.class);
+                        String cond = ds.child("itemCondition").getValue(String.class);
+                        String imgUrl = ds.child("itemImage").getValue(String.class);
 
                         if (name == null)
                             name = "Barang Tanpa Nama";
