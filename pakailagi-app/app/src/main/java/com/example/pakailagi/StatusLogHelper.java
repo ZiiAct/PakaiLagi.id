@@ -90,4 +90,15 @@ public class StatusLogHelper {
     public static void logRejected(String itemId, String requestId, String adminUid) {
         pushLog(itemId, requestId, "rejected", adminUid);
     }
+
+    /**
+     * Called when admin approves an item or request.
+     *
+     * @param itemId    The hibahReq item key
+     * @param requestId The receiveReq key (can be "" for item approval)
+     * @param adminUid  UID of admin performing approval
+     */
+    public static void logApproved(String itemId, String requestId, String adminUid) {
+        pushLog(itemId, requestId, "approved", adminUid);
+    }
 }

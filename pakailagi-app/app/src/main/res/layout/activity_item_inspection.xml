@@ -37,6 +37,7 @@
                     app:tint="#0056B3" />
 
                 <TextView
+                    android:id="@+id/tvInspectionTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -58,6 +59,7 @@
                     app:tint="#495057" />
 
                 <TextView
+                    android:id="@+id/tvItemIdBadge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -95,6 +97,7 @@
 
                         <!-- Main Image Placeholder -->
                         <ImageView
+                            android:id="@+id/ivMainImage"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
@@ -200,7 +203,7 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <!-- Spec 1: Brand -->
+                <!-- Spec 1: Item Name -->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -208,20 +211,21 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Brand"
+                        android:text="Item Name"
                         android:textColor="#6C757D"
                         android:textSize="12sp" />
                     <TextView
+                        android:id="@+id/tvSpecItemName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:text="Canon EOS R6 Mark II"
+                        android:text="-"
                         android:textColor="#212529"
                         android:textSize="12sp" />
                 </RelativeLayout>
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="12dp" android:background="#F1F3F5" />
 
-                <!-- Spec 2: Year -->
+                <!-- Spec 2: Category -->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -229,20 +233,21 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Year of Purchase"
+                        android:text="Category"
                         android:textColor="#6C757D"
                         android:textSize="12sp" />
                     <TextView
+                        android:id="@+id/tvSpecCategory"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:text="2023"
+                        android:text="-"
                         android:textColor="#212529"
                         android:textSize="12sp" />
                 </RelativeLayout>
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="12dp" android:background="#F1F3F5" />
 
-                <!-- Spec 3: Price -->
+                <!-- Spec 3: Donor -->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -250,20 +255,21 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Original Price"
+                        android:text="Donor"
                         android:textColor="#6C757D"
                         android:textSize="12sp" />
                     <TextView
+                        android:id="@+id/tvSpecDonor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:text="Rp 38.000.000"
+                        android:text="-"
                         android:textColor="#212529"
                         android:textSize="12sp" />
                 </RelativeLayout>
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="12dp" android:background="#F1F3F5" />
 
-                <!-- Spec 4: Condition -->
+                <!-- Spec 4: Condition Status -->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -275,10 +281,11 @@
                         android:textColor="#6C757D"
                         android:textSize="12sp" />
                     <TextView
+                        android:id="@+id/tvSpecCondition"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:text="Like New"
+                        android:text="-"
                         android:textColor="#0056B3"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -301,16 +308,169 @@
                     android:background="@drawable/bg_textarea_gray"
                     android:padding="16dp">
                     <TextView
+                        android:id="@+id/tvDonorDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="&quot;Rarely used professional camera. Always stored in a dry box. Body has no scratches, sensor is clean. Includes original battery, charger, and strap. No box available.&quot;"
+                        android:text="No description available."
                         android:textColor="#495057"
                         android:textSize="12sp"
                         android:lineSpacingExtra="4dp" />
                 </LinearLayout>
 
+                <!-- ========================================== -->
+                <!-- SECTION: User Request Notes (Mode 2 only) -->
+                <!-- ========================================== -->
+                <LinearLayout
+                    android:id="@+id/layoutRequestNotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="User Request Details"
+                        android:textColor="#212529"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_info_admin_blue"
+                        android:padding="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Requester"
+                            android:textColor="#6C757D"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvRequesterName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="-"
+                            android:textColor="#212529"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="Notes / Reason"
+                            android:textColor="#6C757D"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvRequestNotes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="No notes provided."
+                            android:textColor="#495057"
+                            android:textSize="12sp"
+                            android:lineSpacingExtra="4dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- ========================================== -->
+                <!-- SECTION: Delivery Address (Mode 3 only)   -->
+                <!-- ========================================== -->
+                <LinearLayout
+                    android:id="@+id/layoutDeliveryAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="Delivery Details"
+                        android:textColor="#212529"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_info_admin_blue"
+                        android:padding="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Requester"
+                            android:textColor="#6C757D"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvDeliveryRequester"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="-"
+                            android:textColor="#212529"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="Pickup / Delivery Address"
+                            android:textColor="#6C757D"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvDeliveryAddress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="-"
+                            android:textColor="#495057"
+                            android:textSize="12sp"
+                            android:lineSpacingExtra="4dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="Status"
+                            android:textColor="#6C757D"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvDeliveryStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Dalam Proses"
+                            android:textColor="#0056B3"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
                 <!-- SECTION: Inspection Checklist -->
                 <TextView
+                    android:id="@+id/tvChecklistTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
@@ -322,6 +482,7 @@
 
                 <!-- Checklist 1: Authenticity -->
                 <LinearLayout
+                    android:id="@+id/layoutChecklist1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -368,6 +529,7 @@
 
                 <!-- Checklist 2: Physical Condition -->
                 <LinearLayout
+                    android:id="@+id/layoutChecklist2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -414,6 +576,7 @@
 
                 <!-- Checklist 3: Functionality -->
                 <LinearLayout
+                    android:id="@+id/layoutChecklist3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -460,6 +623,7 @@
 
                 <!-- SECTION: Internal Notes -->
                 <TextView
+                    android:id="@+id/tvNotesLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
@@ -469,6 +633,7 @@
                     android:textStyle="bold" />
 
                 <EditText
+                    android:id="@+id/etInternalNotes"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:layout_marginTop="8dp"
@@ -481,8 +646,11 @@
                     android:textColorHint="#ADB5BD"
                     android:textSize="12sp" />
 
-                <!-- ACTION BUTTONS (Udah di-update pake ikon baru!) -->
+                <!-- ====================================== -->
+                <!-- ACTION BUTTONS: Mode 1 & 2 (Approve + Reject) -->
+                <!-- ====================================== -->
                 <LinearLayout
+                    android:id="@+id/btnApprove"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
@@ -498,6 +666,7 @@
                         app:tint="#FFFFFF" />
 
                     <TextView
+                        android:id="@+id/tvBtnApproveText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -508,6 +677,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/btnReject"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
@@ -523,6 +693,7 @@
                         app:tint="#DC3545" />
 
                     <TextView
+                        android:id="@+id/tvBtnRejectText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -532,8 +703,39 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
+                <!-- ====================================== -->
+                <!-- ACTION BUTTON: Mode 3 (Konfirmasi Diterima) -->
+                <!-- ====================================== -->
+                <LinearLayout
+                    android:id="@+id/btnKonfirmasi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/bg_btn_blue_radius8"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingVertical="14dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        app:srcCompat="@drawable/ic_check_white"
+                        app:tint="#FFFFFF" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Konfirmasi Diterima"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
                 <!-- Disclaimer Footer -->
                 <TextView
+                    android:id="@+id/tvDisclaimer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"

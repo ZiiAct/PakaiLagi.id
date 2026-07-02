@@ -234,10 +234,7 @@ public class HibahFragment extends Fragment {
                         Toast.makeText(getContext(), "Isi nomor kontak terlebih dahulu.", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if (selectedImageUri == null) {
-                        Toast.makeText(getContext(), "Pilih gambar barang terlebih dahulu!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
+                    // Image is optional — no validation needed
 
                     currentStep = 2;
                     showStep(currentStep);
@@ -283,12 +280,7 @@ public class HibahFragment extends Fragment {
                         showStep(currentStep);
                         return;
                     }
-                    if (selectedImageUri == null) {
-                        Toast.makeText(getContext(), "Pilih gambar barang terlebih dahulu!", Toast.LENGTH_SHORT).show();
-                        currentStep = 1;
-                        showStep(currentStep);
-                        return;
-                    }
+                    // Image is optional — no validation needed
                     if (TextUtils.isEmpty(lokasiPengambilan)) {
                         Toast.makeText(getContext(), "Isi lokasi pengambilan terlebih dahulu.", Toast.LENGTH_SHORT)
                                 .show();
@@ -304,9 +296,15 @@ public class HibahFragment extends Fragment {
                         return;
                     }
 
-                    Toast.makeText(getContext(), "Mengupload gambar ke server...", Toast.LENGTH_SHORT).show();
-                    uploadKeServer(selectedImageUri, namaBarang, kategori, deskripsi,
-                            kondisiBarang, deliveryOption, lokasiWaktu, lokasiPengambilan, kontak);
+                    if (selectedImageUri != null) {
+                        Toast.makeText(getContext(), "Mengupload gambar ke server...", Toast.LENGTH_SHORT).show();
+                        uploadKeServer(selectedImageUri, namaBarang, kategori, deskripsi,
+                                kondisiBarang, deliveryOption, lokasiWaktu, lokasiPengambilan, kontak);
+                    } else {
+                        // No image selected — save directly without upload
+                        simpanKeFirebase("", namaBarang, kategori, deskripsi,
+                                kondisiBarang, deliveryOption, lokasiWaktu, lokasiPengambilan, kontak);
+                    }
                 }
             });
         }

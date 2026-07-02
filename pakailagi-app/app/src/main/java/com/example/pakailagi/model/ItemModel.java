@@ -11,6 +11,7 @@ public class ItemModel {
     private String condition;
     private String description;
     private String category;
+    private boolean availability;
 
     // Constructor kosong (Wajib ada untuk Firebase deserialization)
     public ItemModel() {}
@@ -46,4 +47,7 @@ public class ItemModel {
 
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
+
+    public boolean isAvailability() { return availability; }
+    public void setAvailability(boolean availability) { this.availability = availability; }
 }

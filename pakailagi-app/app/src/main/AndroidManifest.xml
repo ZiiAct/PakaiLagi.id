@@ -40,6 +40,10 @@
         android:exported="false"
         android:windowSoftInputMode="adjustResize" />
     <activity
+        android:name=".ItemInspectionActivity"
+        android:exported="false"
+        android:windowSoftInputMode="adjustResize" />
+    <activity
         android:name="com.example.pakailagi.HomeActivity"
         android:exported="false"
 
