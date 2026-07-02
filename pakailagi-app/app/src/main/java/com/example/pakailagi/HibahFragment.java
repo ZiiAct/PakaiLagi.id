@@ -534,27 +534,48 @@ public class HibahFragment extends Fragment {
         itemData.put("deliveryOption", deliveryOption);
         itemData.put("lokasiWaktu", lokasiWaktu);
         itemData.put("pickupLocation", lokasiPengambilan);
+        itemData.put("status", "pending"); // Add status so it appears in inventory
         itemData.put("createdAt", System.currentTimeMillis());
 
         Log.d(TAG, "Menyimpan ke Firebase items/" + itemId);
 
         itemsRef.child(itemId).setValue(itemData)
                 .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "Firebase write SUKSES untuk itemId: " + itemId);
-                    if (getActivity() != null) {
-                        getActivity().runOnUiThread(() -> {
-                            Toast.makeText(getContext(),
-                                    "Barang berhasil dihibahkan! 🎉",
-                                    Toast.LENGTH_LONG).show();
-                            // Kembali ke Home
-                            View homeNav = getActivity().findViewById(R.id.nav_home_layout);
-                            if (homeNav != null)
-                                homeNav.performClick();
-                        });
-                    }
+                    // Create hibahReq relationship for approval
+                    String hibahId = "hibah_" + randomSuffix;
+                    Map<String, Object> reqData = new HashMap<>();
+                    reqData.put("id_items", itemId);
+                    reqData.put("id_users", userId);
+                    reqData.put("notesEvaluation", "");
+                    
+                    // Format ISO 8601 for reqDate
+                    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", java.util.Locale.getDefault());
+                    sdf.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
+                    reqData.put("reqDate", sdf.format(new java.util.Date()));
+                    
+                    reqData.put("reqStatus", "pending");
+
+                    FirebaseDatabase.getInstance().getReference("hibahReq").child(hibahId).setValue(reqData)
+                            .addOnSuccessListener(aVoid2 -> {
+                                Log.d(TAG, "Firebase write SUKSES untuk itemId: " + itemId + " dan hibahReq: " + hibahId);
+                                if (getActivity() != null) {
+                                    getActivity().runOnUiThread(() -> {
+                                        Toast.makeText(getContext(),
+                                                "Barang berhasil dihibahkan! 🎉",
+                                                Toast.LENGTH_LONG).show();
+                                        // Kembali ke Home
+                                        View homeNav = getActivity().findViewById(R.id.nav_home_layout);
+                                        if (homeNav != null)
+                                            homeNav.performClick();
+                                    });
+                                }
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e(TAG, "Firebase write hibahReq GAGAL: " + e.getMessage());
+                            });
                 })
                 .addOnFailureListener(e -> {
-                    Log.e(TAG, "Firebase write GAGAL: " + e.getMessage());
+                    Log.e(TAG, "Firebase write items GAGAL: " + e.getMessage());
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(() -> Toast.makeText(getContext(),
                                 "Gagal menyimpan ke database: " + e.getMessage(),

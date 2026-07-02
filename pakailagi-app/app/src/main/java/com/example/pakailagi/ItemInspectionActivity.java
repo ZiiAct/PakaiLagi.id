@@ -285,11 +285,29 @@ public class ItemInspectionActivity extends AppCompatActivity {
         });
     }
 
+    private void updateHibahReqStatus(String itemId, String status) {
+        FirebaseDatabase.getInstance().getReference("hibahReq")
+                .orderByChild("id_items").equalTo(itemId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            ds.getRef().child("reqStatus").setValue(status);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
+                });
+    }
+
     private void approveItem() {
         if (itemId == null) return;
 
         itemsRef.child(itemId).child("status").setValue("approved")
                 .addOnSuccessListener(aVoid -> {
+                    updateHibahReqStatus(itemId, "approved");
+
                     // Log to statusLog
                     String adminUid = getCurrentAdminUid();
                     StatusLogHelper.logApproved(itemId, "", adminUid);
@@ -307,6 +325,8 @@ public class ItemInspectionActivity extends AppCompatActivity {
 
         itemsRef.child(itemId).child("status").setValue("rejected")
                 .addOnSuccessListener(aVoid -> {
+                    updateHibahReqStatus(itemId, "rejected");
+
                     String adminUid = getCurrentAdminUid();
                     StatusLogHelper.logRejected(itemId, "", adminUid);
 
