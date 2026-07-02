@@ -47,7 +47,7 @@ public class GoogleDriveService {
 
         GoogleCredentials credentials = GoogleCredentials
                 .fromStream(in)
-                .createScoped(Collections.singletonList(DriveScopes.DRIVE_FILE));
+                .createScoped(Collections.singletonList(DriveScopes.DRIVE));
 
         return new Drive.Builder(
                 GoogleNetHttpTransport.newTrustedTransport(),
