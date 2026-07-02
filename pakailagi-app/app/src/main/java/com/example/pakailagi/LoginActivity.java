@@ -14,9 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.pakailagi.data.SessionManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -49,9 +51,9 @@ public class LoginActivity extends AppCompatActivity {
             btnLogin = findViewById(R.id.btnLogin);
             tvRegisterNow = findViewById(R.id.tvRegisterNow);
 
-            // Jika user sudah login sebelumnya, langsung ke MainActivity
+            // Jika user sudah login sebelumnya, check role dan navigate sesuai role
             if (mAuth.getCurrentUser() != null) {
-                goToMain();
+                goToRoleBasedActivity();
                 return;
             }
 
@@ -99,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(this, "Login Sukses!", Toast.LENGTH_SHORT).show();
-                        goToMain();
+                        goToRoleBasedActivity();
                     } else {
                         Exception e = task.getException();
                         if (e instanceof FirebaseAuthInvalidUserException
@@ -108,6 +110,66 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(this, "Password atau Username salah", Toast.LENGTH_LONG).show();
                         }
+                    }
+                });
+    }
+
+    private void goToRoleBasedActivity() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
+            return;
+        }
+
+        String uid = currentUser.getUid();
+        SessionManager sessionManager = SessionManager.getInstance(this);
+
+        mDatabase.child("users").child(uid).child("role")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        String role = snapshot.getValue(String.class);
+                        Intent intent;
+
+                        if (role != null && role.equalsIgnoreCase("admin")) {
+                            // Save admin role to SessionManager
+                            sessionManager.setUserRole("admin");
+                            intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
+                        } else {
+                            // Save user role to SessionManager
+                            sessionManager.setUserRole("user");
+                            intent = new Intent(LoginActivity.this, MainActivity.class);
+                        }
+
+                        // Also save user info
+                        sessionManager.setUserId(uid);
+                        if (currentUser.getEmail() != null) {
+                            sessionManager.setUserEmail(currentUser.getEmail());
+                        }
+                        if (currentUser.getDisplayName() != null) {
+                            sessionManager.setUserName(currentUser.getDisplayName());
+                        }
+
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // If Firebase fails, use cached role from SharedPreferences
+                        SessionManager sessionManager = SessionManager.getInstance(LoginActivity.this);
+                        String cachedRole = sessionManager.getUserRole();
+                        Intent intent;
+
+                        if (cachedRole.equalsIgnoreCase("admin")) {
+                            intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
+                        } else {
+                            intent = new Intent(LoginActivity.this, MainActivity.class);
+                        }
+
+                        startActivity(intent);
+                        finish();
                     }
                 });
     }

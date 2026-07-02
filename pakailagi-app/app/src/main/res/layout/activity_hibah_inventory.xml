@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="#F8F9FA"
     tools:ignore="HardcodedText,ContentDescription,SmallSp,UseCompoundDrawables,UselessParent,TooManyViews,Typos,Autofill">
     <!-- PAKE PEREDAM DI ATAS BIAR ANDROID STUDIO NGGAK BAWEL -->
@@ -411,6 +412,7 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -418,6 +420,7 @@
                                 android:textColor="#868E96"
                                 android:textSize="10sp"
                                 android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -435,11 +438,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
+                            android:lineSpacingExtra="2dp"
                             android:text="Rolex\nSubmariner\n2022"
                             android:textColor="#212529"
                             android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:lineSpacingExtra="2dp"/>
+                            android:textStyle="bold" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -447,21 +450,25 @@
                             android:layout_marginTop="12dp"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
+
                             <ImageView
                                 android:layout_width="28dp"
                                 android:layout_height="28dp"
                                 app:srcCompat="@drawable/ic_person" />
+
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
                                 android:orientation="vertical">
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Donor"
                                     android:textColor="#ADB5BD"
                                     android:textSize="10sp" />
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -476,6 +483,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -483,6 +491,7 @@
                                 android:textColor="#6C757D"
                                 android:textSize="10sp"
                                 android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -506,25 +515,104 @@
                             android:baselineAligned="false"
                             android:orientation="horizontal">
 
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
-                                <ImageView android:layout_width="16dp" android:layout_height="16dp" app:srcCompat="@drawable/ic_step_check" app:tint="#00796B" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Initial" android:textSize="9sp" android:textColor="#00796B" android:textStyle="bold"/>
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    app:srcCompat="@drawable/ic_step_check"
+                                    app:tint="#00796B" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:text="Initial"
+                                    android:textColor="#00796B"
+                                    android:textSize="9sp"
+                                    android:textStyle="bold" />
                             </LinearLayout>
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
-                                <ImageView android:layout_width="16dp" android:layout_height="16dp" app:srcCompat="@drawable/ic_step_check" app:tint="#00796B" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="QC" android:textSize="9sp" android:textColor="#00796B" android:textStyle="bold"/>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    app:srcCompat="@drawable/ic_step_check"
+                                    app:tint="#00796B" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:text="QC"
+                                    android:textColor="#00796B"
+                                    android:textSize="9sp"
+                                    android:textStyle="bold" />
                             </LinearLayout>
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
-                                <ImageView android:layout_width="16dp" android:layout_height="16dp" app:srcCompat="@drawable/ic_step_check" app:tint="#00796B" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Inventory" android:textSize="9sp" android:textColor="#00796B" android:textStyle="bold"/>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    app:srcCompat="@drawable/ic_step_check"
+                                    app:tint="#00796B" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:text="Inventory"
+                                    android:textColor="#00796B"
+                                    android:textSize="9sp"
+                                    android:textStyle="bold" />
                             </LinearLayout>
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
-                                <ImageView android:layout_width="16dp" android:layout_height="16dp" app:srcCompat="@drawable/ic_step_check" app:tint="#00796B" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Ready" android:textSize="9sp" android:textColor="#00796B" android:textStyle="bold"/>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    app:srcCompat="@drawable/ic_step_check"
+                                    app:tint="#00796B" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:text="Ready"
+                                    android:textColor="#00796B"
+                                    android:textSize="9sp"
+                                    android:textStyle="bold" />
                             </LinearLayout>
                         </LinearLayout>
 
-                        <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="16dp" android:background="#F1F3F5" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="16dp"
+                            android:background="#F1F3F5" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -609,10 +697,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_admin_nav_active"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="10dp"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="10dp">
 
                 <ImageView
                     android:layout_width="20dp"
@@ -624,12 +712,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
+                    android:maxLines="1"
+                    android:singleLine="true"
                     android:text="Home"
                     android:textColor="#FFFFFF"
                     android:textSize="10sp"
-                    android:textStyle="bold"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
 
@@ -692,6 +780,5 @@
                 android:textColor="#ADB5BD"
                 android:textSize="10sp" />
         </LinearLayout>
-
     </LinearLayout>
 </RelativeLayout>

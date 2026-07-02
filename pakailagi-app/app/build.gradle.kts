@@ -31,6 +31,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
@@ -43,4 +44,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:34.14.1"))
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-auth")
+
+    // HTTP Client untuk upload file ke Spring Boot server
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
 }

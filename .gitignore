@@ -23,3 +23,7 @@ Thumbs.db
 # Dependency directories
 node_modules/
 
+# Google Drive service account credentials
+pakailagi-server/src/main/resources/google-drive-credentials.json
+
+

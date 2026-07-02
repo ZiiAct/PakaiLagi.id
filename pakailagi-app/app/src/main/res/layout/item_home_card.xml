@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- item_home_card.xml — Card item untuk halaman Beranda (dinamic dari Firebase) -->
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="160dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="16dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    tools:ignore="HardcodedText,ContentDescription,SpeakableTextPresentCheck">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!-- Placeholder image area -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            app:cardBackgroundColor="#F0F4F8"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            android:importantForAccessibility="no">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:src="@android:drawable/ic_menu_gallery"
+                app:tint="#A0AAB5"
+                android:importantForAccessibility="no"/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Nama barang -->
+        <TextView
+            android:id="@+id/tvHomeCardName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="#212529"
+            android:layout_marginTop="12dp"
+            android:textSize="12sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            tools:text="Nama Barang"/>
+
+        <!-- Lokasi -->
+        <TextView
+            android:id="@+id/tvHomeCardLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:textColor="#6C757D"
+            android:layout_marginTop="4dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="Jakarta Selatan"/>
+
+        <!-- Status badge -->
+        <TextView
+            android:id="@+id/tvHomeCardStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="#1A7B42"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_marginTop="12dp"
+            tools:text="Tersedia"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

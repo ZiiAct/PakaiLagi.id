@@ -8,10 +8,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.pakailagi.R;
 import com.example.pakailagi.model.WishlistItem;
-import com.google.android.material.button.MaterialButton;
 import java.util.List;
 
 public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHolder> {
@@ -73,7 +73,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
         ImageView imgItem;
         TextView tvCondition, tvName, tvLocation;
         ImageButton btnDelete;
-        MaterialButton btnDetail, btnApply;
+        CardView btnDetail, btnApply;
 
         ViewHolder(View itemView) {
             super(itemView);

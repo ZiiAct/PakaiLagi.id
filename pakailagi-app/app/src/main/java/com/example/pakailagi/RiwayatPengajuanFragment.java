@@ -20,11 +20,13 @@ import androidx.fragment.app.Fragment;
 @SuppressWarnings("all")
 public class RiwayatPengajuanFragment extends Fragment {
 
-    public RiwayatPengajuanFragment() {}
+    public RiwayatPengajuanFragment() {
+    }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_riwayat_pengajuan, container, false);
     }
 
@@ -33,9 +35,11 @@ public class RiwayatPengajuanFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         View btnBack = view.findViewById(R.id.btnBackRiwayat);
-        if (btnBack != null) btnBack.setOnClickListener(v -> {
-            if (getActivity() != null) getActivity().findViewById(R.id.nav_home_layout).performClick();
-        });
+        if (btnBack != null)
+            btnBack.setOnClickListener(v -> {
+                if (getActivity() != null)
+                    getActivity().findViewById(R.id.nav_home_layout).performClick();
+            });
 
         try {
             ViewGroup root = (ViewGroup) view;
@@ -51,9 +55,9 @@ public class RiwayatPengajuanFragment extends Fragment {
                 new AlertDialog.Builder(getContext())
                         .setTitle("Cari Riwayat")
                         .setView(input)
-                        .setPositiveButton("Cari", (dialog, which) ->
-                                Toast.makeText(getContext(), "Mencari: " + input.getText(), Toast.LENGTH_SHORT).show()
-                        ).show();
+                        .setPositiveButton("Cari", (dialog, which) -> Toast
+                                .makeText(getContext(), "Mencari: " + input.getText(), Toast.LENGTH_SHORT).show())
+                        .show();
             });
 
             // Tab Logic
@@ -68,17 +72,21 @@ public class RiwayatPengajuanFragment extends Fragment {
 
             LinearLayout layoutCard1 = (LinearLayout) card1.getChildAt(0);
             LinearLayout textLayoutCard1 = (LinearLayout) ((LinearLayout) layoutCard1.getChildAt(0)).getChildAt(1);
-            TextView tvTitleCard1 = (TextView) ((android.widget.RelativeLayout) textLayoutCard1.getChildAt(0)).getChildAt(0);
+            TextView tvTitleCard1 = (TextView) ((android.widget.RelativeLayout) textLayoutCard1.getChildAt(0))
+                    .getChildAt(0);
             TextView tvStatusCard1 = (TextView) ((LinearLayout) textLayoutCard1.getChildAt(2)).getChildAt(1);
             LinearLayout buttonsCard1 = (LinearLayout) layoutCard1.getChildAt(1);
 
-            buttonsCard1.getChildAt(0).setOnClickListener(v -> Toast.makeText(getContext(), "Pengajuan Dibatalkan!", Toast.LENGTH_SHORT).show());
+            buttonsCard1.getChildAt(0).setOnClickListener(
+                    v -> Toast.makeText(getContext(), "Pengajuan Dibatalkan!", Toast.LENGTH_SHORT).show());
             buttonsCard1.getChildAt(1).setOnClickListener(v -> {
-                if (getActivity() instanceof MainActivity) ((MainActivity) getActivity()).showDetailBarang("Buku Kalkulus Purcel", "200m dari Anda");
+                if (getActivity() instanceof MainActivity)
+                    ((MainActivity) getActivity()).showDetailBarang("Buku Kalkulus Purcel", "200m dari Anda");
             });
 
             CardView btnKabari = (CardView) ((LinearLayout) card2.getChildAt(0)).getChildAt(2);
-            btnKabari.setOnClickListener(v -> Toast.makeText(getContext(), "Pesan dikirim! Pemilik berhasil dikabari.", Toast.LENGTH_LONG).show());
+            btnKabari.setOnClickListener(v -> Toast
+                    .makeText(getContext(), "Pesan dikirim! Pemilik berhasil dikabari.", Toast.LENGTH_LONG).show());
 
             tabSedangDiajukan.setOnClickListener(v -> {
                 tvSedangDiajukan.setTextColor(Color.parseColor("#212529"));
@@ -106,6 +114,7 @@ public class RiwayatPengajuanFragment extends Fragment {
                 buttonsCard1.setVisibility(View.GONE);
             });
 
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 }

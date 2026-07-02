@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.example.pakailagi.data.SessionManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,11 +27,13 @@ import com.google.firebase.database.ValueEventListener;
 @SuppressWarnings("all")
 public class ProfilFragment extends Fragment {
 
-    public ProfilFragment() {}
+    public ProfilFragment() {
+    }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_profil, container, false);
     }
 
@@ -41,11 +44,17 @@ public class ProfilFragment extends Fragment {
         // Load data profil dari Firebase
         loadUserProfile(view);
 
+        // Step 6: Load statistik dinamis dari user_stats
+        loadUserStats(view);
+
         View btnBack = view.findViewById(R.id.btnBackProfil);
-        if (btnBack != null) btnBack.setOnClickListener(v -> simulateNav(R.id.nav_home_layout));
+        if (btnBack != null)
+            btnBack.setOnClickListener(v -> simulateNav(R.id.nav_home_layout));
 
         View btnSettings = view.findViewById(R.id.btnSettings);
-        if (btnSettings != null) btnSettings.setOnClickListener(v -> Toast.makeText(getContext(), "Menu Pengaturan Dibuka", Toast.LENGTH_SHORT).show());
+        if (btnSettings != null)
+            btnSettings.setOnClickListener(
+                    v -> Toast.makeText(getContext(), "Menu Pengaturan Dibuka", Toast.LENGTH_SHORT).show());
 
         try {
             ViewGroup root = (ViewGroup) view;
@@ -67,35 +76,47 @@ public class ProfilFragment extends Fragment {
             // KOTAK AKUN & AKTIVITAS
             CardView cardAkun = (CardView) mainLayout.getChildAt(4);
             LinearLayout layoutAkun = (LinearLayout) cardAkun.getChildAt(0);
-            layoutAkun.getChildAt(0).setOnClickListener(v -> Toast.makeText(getContext(), "Buka Edit Profil", Toast.LENGTH_SHORT).show());
+            layoutAkun.getChildAt(0).setOnClickListener(
+                    v -> Toast.makeText(getContext(), "Buka Edit Profil", Toast.LENGTH_SHORT).show());
             layoutAkun.getChildAt(2).setOnClickListener(v -> simulateNav(R.id.nav_grant_layout));
 
             // KOTAK DUKUNGAN & LOGOUT
             CardView cardDukungan = (CardView) mainLayout.getChildAt(6);
             LinearLayout layoutDukungan = (LinearLayout) cardDukungan.getChildAt(0);
-            layoutDukungan.getChildAt(0).setOnClickListener(v -> Toast.makeText(getContext(), "Membuka Pusat Bantuan...", Toast.LENGTH_SHORT).show());
+            layoutDukungan.getChildAt(0).setOnClickListener(
+                    v -> Toast.makeText(getContext(), "Membuka Pusat Bantuan...", Toast.LENGTH_SHORT).show());
 
             // LOGOUT
             layoutDukungan.getChildAt(2).setOnClickListener(v -> {
                 try {
+                    // Clear session data
+                    SessionManager.getInstance(getContext()).clearSession();
+
+                    // Sign out from Firebase
                     FirebaseAuth.getInstance().signOut();
                     Toast.makeText(getContext(), "Logout Berhasil!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-                    if (getActivity() != null) getActivity().finish();
+                    // Close current activity properly
+                    if (getActivity() != null) {
+                        getActivity().finishAffinity();
+                    }
                 } catch (Exception ex) {
-                    Toast.makeText(getContext(), "SYSTEM INFO: Gagal ke halaman Login (Cek AndroidManifest.xml). Kembali ke Beranda.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),
+                            "SYSTEM INFO: Gagal ke halaman Login (Cek AndroidManifest.xml). Kembali ke Beranda.",
+                            Toast.LENGTH_LONG).show();
                     simulateNav(R.id.nav_home_layout);
                 }
             });
 
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     private void loadUserProfile(View view) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser == null) return;
+        if (currentUser == null)
+            return;
 
         TextView tvProfilName = view.findViewById(R.id.tvProfilName);
         TextView tvProfilUniversity = view.findViewById(R.id.tvProfilUniversity);
@@ -150,10 +171,49 @@ public class ProfilFragment extends Fragment {
         });
     }
 
+    /**
+     * Step 6: Reads totalDonated and totalReceived from user_stats/{uid}
+     * and updates the stats card TextViews in real-time.
+     */
+    private void loadUserStats(View view) {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null)
+            return;
+
+        TextView tvStatDonated = view.findViewById(R.id.tvStatDonated);
+        TextView tvStatReceived = view.findViewById(R.id.tvStatReceived);
+
+        DatabaseReference statsRef = FirebaseDatabase.getInstance()
+                .getReference("user_stats")
+                .child(currentUser.getUid());
+
+        statsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!isAdded())
+                    return;
+
+                Long donated = snapshot.child("totalDonated").getValue(Long.class);
+                Long received = snapshot.child("totalReceived").getValue(Long.class);
+
+                if (tvStatDonated != null)
+                    tvStatDonated.setText(donated != null ? String.valueOf(donated) : "0");
+                if (tvStatReceived != null)
+                    tvStatReceived.setText(received != null ? String.valueOf(received) : "0");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Stats will just remain at "-" (default set in XML)
+            }
+        });
+    }
+
     private void simulateNav(int navId) {
         if (getActivity() != null) {
             View nav = getActivity().findViewById(navId);
-            if (nav != null) nav.performClick();
+            if (nav != null)
+                nav.performClick();
         }
     }
 }
