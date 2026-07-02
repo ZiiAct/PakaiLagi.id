@@ -57,6 +57,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
             updateNavbarState(1);
         });
 
+        // Shop nav item is hidden (visibility="gone" in layout); listener kept for when it's re-enabled
         navShop.setOnClickListener(v -> {
             loadFragment(new AdminShopFragment(), "shop");
             updateNavbarState(2);
