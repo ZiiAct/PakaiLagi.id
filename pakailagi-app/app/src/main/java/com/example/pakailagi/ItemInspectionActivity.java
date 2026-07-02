@@ -520,9 +520,10 @@ public class ItemInspectionActivity extends AppCompatActivity {
     private void confirmCompletion() {
         if (requestId == null || itemId == null) return;
 
-        // 1. Set item availability to false
+        // 1. Set item availability to false and status to "selesai"
         Map<String, Object> itemUpdates = new HashMap<>();
         itemUpdates.put("availability", false);
+        itemUpdates.put("status", "selesai");
         itemsRef.child(itemId).updateChildren(itemUpdates);
 
         // 2. Update receiveReq status to "selesai"

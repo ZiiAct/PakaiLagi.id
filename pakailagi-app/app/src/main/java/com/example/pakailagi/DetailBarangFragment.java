@@ -286,7 +286,7 @@ public class DetailBarangFragment extends Fragment {
         requestData.put("requesterId", uid);
         requestData.put("requesterName", user.getDisplayName() != null ? user.getDisplayName() : user.getEmail());
         requestData.put("donorId", donorId.isEmpty() ? "unknown" : donorId);
-        requestData.put("status", "process");
+        requestData.put("status", "pending");
         requestData.put("timestamp", ServerValue.TIMESTAMP);
 
         receiveReqRef.setValue(requestData)

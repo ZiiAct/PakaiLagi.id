@@ -31,13 +31,15 @@ public class GoogleDriveService {
         String envCredentials = System.getenv("GOOGLE_DRIVE_CREDENTIALS");
 
         if (envCredentials != null && !envCredentials.trim().isEmpty()) {
+            envCredentials = envCredentials.replace("\\n", "\n");
             in = new java.io.ByteArrayInputStream(envCredentials.getBytes(java.nio.charset.StandardCharsets.UTF_8));
         } else {
             in = getClass().getResourceAsStream("/google-drive-credentials.json");
         }
 
         if (in == null) {
-            throw new IOException("Kredensial Google Drive tidak ditemukan di env GOOGLE_DRIVE_CREDENTIALS maupun resources!");
+            throw new IOException(
+                    "Kredensial Google Drive tidak ditemukan di env GOOGLE_DRIVE_CREDENTIALS maupun resources!");
         }
 
         GoogleCredentials credentials = GoogleCredentials
@@ -57,8 +59,10 @@ public class GoogleDriveService {
      *
      * @param file MultipartFile yang diterima dari request Android
      * @return URL publik file yang bisa diakses dengan link (webViewLink)
-     * @throws IOException              jika terjadi error saat membaca file atau komunikasi dengan Drive
-     * @throws GeneralSecurityException jika terjadi error keamanan saat inisialisasi transport
+     * @throws IOException              jika terjadi error saat membaca file atau
+     *                                  komunikasi dengan Drive
+     * @throws GeneralSecurityException jika terjadi error keamanan saat
+     *                                  inisialisasi transport
      */
     public String uploadImageToDrive(MultipartFile file) throws IOException, GeneralSecurityException {
         Drive driveService = getDriveService();
@@ -71,8 +75,7 @@ public class GoogleDriveService {
         // Siapkan konten file dari InputStream
         InputStreamContent mediaContent = new InputStreamContent(
                 file.getContentType(),
-                file.getInputStream()
-        );
+                file.getInputStream());
 
         // Eksekusi upload ke Drive
         File uploadedFile = driveService.files()
