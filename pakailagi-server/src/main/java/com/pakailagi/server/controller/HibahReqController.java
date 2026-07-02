@@ -30,6 +30,7 @@ public class HibahReqController {
             // Kembalikan hanya URL agar Android bisa langsung memakainya
             return ResponseEntity.ok(imageUrl);
         } catch (Exception e) {
+            e.printStackTrace(); // Print full trace to server logs
             return ResponseEntity.status(500).body("Upload gagal: " + e.getMessage());
         }
     }

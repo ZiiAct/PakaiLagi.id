@@ -87,12 +87,17 @@ public class GoogleDriveService {
                 .execute();
 
         // Set permission agar file bisa diakses publik via link
-        Permission permission = new Permission()
-                .setType("anyone")
-                .setRole("reader");
-        driveService.permissions()
-                .create(uploadedFile.getId(), permission)
-                .execute();
+        try {
+            Permission permission = new Permission()
+                    .setType("anyone")
+                    .setRole("reader");
+            driveService.permissions()
+                    .create(uploadedFile.getId(), permission)
+                    .execute();
+        } catch (Exception e) {
+            System.err.println("Gagal mengatur permission publik (mungkin policy workspace atau folder sudah publik): " + e.getMessage());
+            // Lanjut saja karena file sudah berhasil di-upload
+        }
 
         return uploadedFile.getWebViewLink();
     }
